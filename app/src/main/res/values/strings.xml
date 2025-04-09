@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">DoH VPN</string>
+    <string name="my_app">DoH VPN</string> <string name="cert_status_description">Estado del certificado</string>
+    <string name="cert_status_unverified">Estado: Sin verificar</string>
+    <string name="cert_status_verifying">Estado: Verificando...</string>
+    <string name="cert_status_valid">Estado: Válido</string>
+    <string name="cert_status_invalid">Estado: Inválido</string>
+    <string name="cert_status_warning">Estado: Advertencia</string>
+    <string name="cert_warning_changed">Advertencia: ¡Certificado inválido o cambiado!</string>
+
+    <string name="settings">Configuración</string>
+    <string name="dns">DNS</string>
+    <string name="certs">Certs</string>
+    <string name="server">Server</string>
+
+    <string name="power_button">Botón de encendido</string>
+
+    <string name="connect_button_text">Conectar</string> <string name="disconnect_button_text">Desconectar</string> <string name="vpn_permission_denied">Permiso VPN Denegado</string>
+    <string name="connected_success">Conectado correctamente</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="error_prefix">Error:</string>
+    <string name="error_stopping_prefix">Error al detener:</string>
+
+</resources>

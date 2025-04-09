@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item> <item name="android:colorBackground">@color/colorSurface</item> <item name="colorSurface">@color/colorSurface</item> <item name="colorOnBackground">@color/colorOnSurface</item> <item name="colorOnSurface">@color/colorOnSurface</item> <item name="colorSurfaceVariant">?attr/colorSurface</item> <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item> <item name="colorOutline">@color/colorOutline</item> </style>
+
+    <style name="Theme.DnsVpn" parent="Theme.App.Base" />
+
+</resources>

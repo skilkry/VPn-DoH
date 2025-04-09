@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permiso para usar el servicio VPN -->
+    <uses-permission android:name="android.permission.INTERNET"
+        tools:ignore="ProtectedPermissions" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="DNS VPN"
+        android:theme="@style/Theme.DnsVpn">
+
+        <!-- Declaración del servicio VPN -->
+        <service
+            android:name="com.ventaone.dnsvpn.DnsVpnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+
+
+        <!-- Actividad principal -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="DNS VPN"
+            android:theme="@style/Theme.DnsVpn"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DnsSettingsActivity"
+            android:label="Configuración DNS"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity
+            android:name=".CertificateVerificationActivity"
+            android:exported="false"
+            android:label="Verificación de Certificado" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="Configuración" />
+    </application>
+
+</manifest>
+
