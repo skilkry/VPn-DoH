@@ -21,3 +21,4 @@ plugins {
     // Hilt Plugin (ya no necesitas agregarlo en buildscript)
     id("com.google.dagger.hilt.android") version "2.52" apply false
 }
+

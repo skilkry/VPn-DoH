@@ -21,7 +21,7 @@ class CertificateMonitor(private val context: Context) {
     enum class CertificateStatus {
         NOT_VERIFIED,  // Gris - No verificado
         VALID,         // Verde - Certificado válido
-        INVALID,       // Rojo - Certificado inválido
+        INVALID,       // Rojo - Certificado inválido/caducado/peligroso
         WARNING        // Amarillo - Advertencia (ej. próximo a expirar)
     }
 
@@ -105,34 +105,44 @@ class CertificateMonitor(private val context: Context) {
                     val certificateChain = response.handshake?.peerCertificates
 
                     if (certificateChain.isNullOrEmpty()) {
-                        updateStatus(CertificateStatus.WARNING)
+                        updateStatus(CertificateStatus.INVALID)
                         return@use
                     }
 
                     // Obtener el certificado del servidor (primero en la cadena)
                     val serverCert = certificateChain[0] as X509Certificate
 
-                    // Verificar si el certificado coincide con el pin guardado
-                    val isValid = CertificateManager.verifyCertificatePin(serverCert, hostname, preferences)
-
-                    // Verificar si el certificado está próximo a expirar (menos de 30 días)
+                    // Verificar validez del certificado
+                    val isPinValid = CertificateManager.verifyCertificatePin(serverCert, hostname, preferences)
+                    val isExpired = isCertificateExpired(serverCert)
                     val isExpiringSoon = isCertificateExpiringSoon(serverCert)
 
+                    // Determinar el estado según los criterios especificados
                     val status = when {
-                        !isValid -> CertificateStatus.INVALID
-                        isExpiringSoon -> CertificateStatus.WARNING
-                        else -> CertificateStatus.VALID
+                        isExpired || !isPinValid -> CertificateStatus.INVALID  // Rojo - Caducado o pin inválido
+                        isExpiringSoon -> CertificateStatus.WARNING           // Amarillo - Próximo a caducar
+                        else -> CertificateStatus.VALID                       // Verde - Todo correcto
                     }
 
                     updateStatus(status)
                 }
             } catch (e: SSLPeerUnverifiedException) {
                 Log.e(TAG, "SSL verification failed", e)
-                updateStatus(CertificateStatus.INVALID)
+                updateStatus(CertificateStatus.INVALID)  // Rojo - Error de verificación SSL
             } catch (e: Exception) {
                 Log.e(TAG, "Connection error", e)
-                updateStatus(CertificateStatus.WARNING)
+                updateStatus(CertificateStatus.WARNING)  // Amarillo - Error de conexión (potencialmente peligroso)
             }
+        }
+    }
+
+    private fun isCertificateExpired(certificate: X509Certificate): Boolean {
+        val now = System.currentTimeMillis()
+        try {
+            certificate.checkValidity()
+            return false
+        } catch (e: Exception) {
+            return true
         }
     }
 
@@ -140,6 +150,9 @@ class CertificateMonitor(private val context: Context) {
         val now = System.currentTimeMillis()
         val expiry = certificate.notAfter.time
         val thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000
+
+        // Si ya expiró, no está "próximo a expirar", simplemente expiró
+        if (now > expiry) return false
 
         return (expiry - now) < thirtyDaysInMillis
     }

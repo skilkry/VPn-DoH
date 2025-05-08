@@ -5,7 +5,7 @@
     <item>
         <shape android:shape="oval">
             <solid android:color="#CCCCCC"/>  <!-- Color gris claro -->
-            <size android:width="200dp" android:height="200dp"/>
+            <size android:width="0dp" android:height="200dp"/>
             <corners android:radius="100dp"/>
         </shape>
     </item>
@@ -20,7 +20,7 @@
     <!-- Círculo verde -->
     <item android:top="20dp" android:bottom="20dp" android:left="20dp" android:right="20dp">
         <shape android:shape="oval">
-            <solid android:color="#00C853"/>  <!-- Verde -->
+            <solid android:color="#3A69D3"/>  <!-- Verde -->
         </shape>
     </item>
 </layer-list>

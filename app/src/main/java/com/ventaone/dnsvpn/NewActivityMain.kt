@@ -11,8 +11,8 @@ class NewActivityMain : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val onButton: Button = findViewById(R.id.onButton)
-        val offButton: Button = findViewById(R.id.offButton)
+        val onButton: Button = findViewById(R.id.powerButton)
+        val offButton: Button = findViewById(R.id.powerButton)
 
         // Acción del botón "Iniciar VPN"
         onButton.setOnClickListener {

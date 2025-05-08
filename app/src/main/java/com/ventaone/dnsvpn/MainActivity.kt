@@ -14,15 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     private val VPN_REQUEST_CODE = 100
     private lateinit var dropdownController: DropdownMenuController
+    private lateinit var powerButton: ImageButton // Declarar powerButton como miembro de la clase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val powerButton: ImageButton = findViewById(R.id.powerButton)
+        powerButton = findViewById(R.id.powerButton) // Inicializar en onCreate
         val powerIcon: ImageView = findViewById(R.id.powerIcon)
-        val startVpnButton: Button = findViewById(R.id.onButton)
-        val stopVpnButton: Button = findViewById(R.id.offButton)
+
 
         // Inicializar el controlador del menú desplegable
         val gearButton: ImageButton = findViewById(R.id.btnServer)
@@ -37,14 +37,13 @@ class MainActivity : AppCompatActivity() {
             serverButton
         )
 
-        // Eliminamos el click listener original del botón certsButton
-        // ya que ahora está manejado por el DropdownMenuController
+
 
         // Actualizar UI según el estado actual del servicio
         updateUI(DnsVpnService.isServiceRunning)
 
         // Botón principal de encendido/apagado
-        powerButton.setOnClickListener {
+        powerButton.setOnClickListener { // Usar la variable powerButton
             if (!DnsVpnService.isServiceRunning) {
                 Log.d("MainActivity", "Intentando iniciar VPN")
                 val vpnIntent = VpnService.prepare(this)
@@ -59,24 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Botón ON
-        startVpnButton.setOnClickListener {
-            if (!DnsVpnService.isServiceRunning) {
-                val vpnIntent = VpnService.prepare(this)
-                if (vpnIntent != null) {
-                    startActivityForResult(vpnIntent, VPN_REQUEST_CODE)
-                } else {
-                    startVpnService()
-                }
-            }
-        }
 
-        // Botón OFF
-        stopVpnButton.setOnClickListener {
-            if (DnsVpnService.isServiceRunning) {
-                stopVpnService()
-            }
-        }
     }
 
     private fun startVpnService() {
@@ -107,18 +89,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI(running: Boolean) {
-        val powerButton: ImageButton = findViewById(R.id.powerButton)
-        val startVpnButton: Button = findViewById(R.id.onButton)
-        val stopVpnButton: Button = findViewById(R.id.offButton)
 
         if (running) {
             powerButton.setBackgroundResource(R.drawable.button_background_red)
-            startVpnButton.visibility = Button.GONE
-            stopVpnButton.visibility = Button.VISIBLE
         } else {
             powerButton.setBackgroundResource(R.drawable.button_background_green)
-            startVpnButton.visibility = Button.VISIBLE
-            stopVpnButton.visibility = Button.GONE
         }
     }
 
