@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/theme_settings.xml -->
+<resources>
+    <!-- Tema personalizado para la actividad de configuración -->
+    <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">#121212</item>
+        <item name="colorAccent">#4CAF50</item>
+        <item name="android:windowBackground">@drawable/bkg</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorSecondary">#CCCCCC</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+
+        <!-- Estilos de preferencias -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+
+        <!-- Color del switch cuando está activado -->
+        <item name="colorControlActivated">#4CAF50</item>
+
+        <!-- Estilo de los dividers -->
+        <item name="android:listDivider">@drawable/preference_divider</item>
+    </style>
+
+    <!-- Tema para los diálogos de alerta (como los de EditTextPreference) -->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">#4CAF50</item>
+        <item name="android:background">#212121</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#4CAF50</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+</resources>

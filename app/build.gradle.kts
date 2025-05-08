@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(System.getenv("storeFile") ?: "C:/Users/Daniel/AndroidStudioProjects/DnsVpn/my-release-key.jks")
+            storeFile = file(System.getenv("storeFile") ?: "/Users/skilkry/AndroidStudioProjects/VPn-DoH/android-keystore/my-release-key.jks")
             storePassword = System.getenv("storePassword") ?: "hola_1234"
             keyAlias = System.getenv("keyAlias") ?: "my-key"
             keyPassword = System.getenv("keyPassword") ?: "hola_1234"

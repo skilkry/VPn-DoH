@@ -1,91 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bkg"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#212121">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Configuración de DNS"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:text="Configuración de DNS"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="DNS Primario:"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"/>
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/primaryDnsEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ej: 1.1.1.1"
-        android:textColorHint="#AAAAAA"
-        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#AAAAAA"
+        android:hint="Ej: 1.1.1.1"
         android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/poppins_regular"
+        android:textColorHint="#AAAAAA" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="DNS Secundario:"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"/>
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/secondaryDnsEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ej: 1.0.0.1"
-        android:textColorHint="#AAAAAA"
-        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="#AAAAAA"
+        android:hint="Ej: 1.0.0.1"
         android:inputType="text"
-        android:layout_marginBottom="24dp"/>
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/poppins_regular"
+        android:textColorHint="#AAAAAA" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
         android:text="Los cambios se aplicarán al reiniciar la VPN"
         android:textColor="#AAAAAA"
-        android:textStyle="italic"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"/>
+        android:fontFamily="@font/poppins_regular"
+        android:textStyle="italic" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guardar"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"/>
+            android:background="@drawable/button_border"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="Guardar"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="#FFFFFF" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
             android:text="Cancelar"
-            android:backgroundTint="#F44336"
-            android:textColor="#FFFFFF"/>
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="Configuración de DNS">
+    <PreferenceCategory
+        android:title="Configuración de DNS"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="DNS_SETTINGS"
             android:title="Configurar servidores DNS"
-            android:summary="Cambiar los servidores DNS primario y secundario">
+            android:summary="Cambiar los servidores DNS primario y secundario"
+            app:iconSpaceReserved="false">
             <intent android:targetPackage="com.ventaone.dnsvpn"
                 android:targetClass="com.ventaone.dnsvpn.DnsSettingsActivity"/>
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Configuración del Servidor">
+    <PreferenceCategory
+        android:title="Configuración del Servidor"
+        app:iconSpaceReserved="false">
         <EditTextPreference
             android:key="SERVER_URL"
             android:title="URL del servidor DNS-over-HTTPS"
             android:summary="URL del servidor para solicitudes DNS"
             android:dialogTitle="Introduce la URL del servidor"
-            android:defaultValue="cloudflare-dns.com" />
+            android:defaultValue="cloudflare-dns.com"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="VERIFY_CERTIFICATE"
             android:title="Verificar certificado del servidor"
-            android:summary="Comprobar la validez del certificado SSL del servidor">
+            android:summary="Comprobar la validez del certificado SSL del servidor"
+            app:iconSpaceReserved="false">
             <intent android:targetPackage="com.ventaone.dnsvpn"
                 android:targetClass="com.ventaone.dnsvpn.CertificateVerificationActivity"/>
         </Preference>
@@ -31,33 +40,44 @@
             android:key="CERTIFICATE_PINNING"
             android:title="Usar certificate pinning"
             android:summary="Mejora la seguridad verificando que el servidor usa el certificado confiable"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Configuración de la aplicación">
+    <PreferenceCategory
+        android:title="Configuración de la aplicación"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:key="AUTO_START"
             android:title="Iniciar al encender el dispositivo"
             android:summary="Iniciar automáticamente el servicio VPN al encender el dispositivo"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:key="NOTIFICATION_ENABLED"
             android:title="Mostrar notificación"
             android:summary="Mostrar notificación cuando el servicio VPN está activo"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Acerca de">
+    <PreferenceCategory
+        android:title="Acerca de"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="ABOUT"
             android:title="Acerca de DNS VPN"
-            android:summary="Información sobre la aplicación y licencias">
+            android:summary="Información sobre la aplicación y licencias"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.AboutActivity"/>
         </Preference>
 
         <Preference
             android:key="VERSION"
             android:title="Versión"
-            android:summary="1.0.0" />
+            android:summary="1.0.0"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

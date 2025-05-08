@@ -1,4 +1,48 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/styles.xml -->
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/bkg</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textColor">#FFFFFF</item>
+
+        <!-- Preference theme settings -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Custom</item>
+    </style>
+
+    <!-- Custom preference theme overlay -->
+    <style name="PreferenceThemeOverlay.Custom" parent="PreferenceThemeOverlay">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorSecondary">#CCCCCC</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <!-- Custom dialog theme for EditTextPreference and ListPreference -->
+    <style name="CustomPreferenceDialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+    <!-- Custom button style for preference dialogs -->
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_border</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Custom switch style -->
+    <style name="CustomSwitchStyle" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:thumbTint">@color/switch_thumb_selector</item>
+        <item name="android:trackTint">@color/switch_track_selector</item>
     </style>
 </resources>

@@ -1,8 +1,10 @@
 <resources>
-    <color name="colorPrimary">#000000</color> <color name="colorSecondary">#03DAC5</color> <color name="colorSurface">#FFFFFF</color> <color name="colorOnPrimary">#FFFFFF</color> <color name="colorOnSurface">#1C1B1F</color> <color name="colorOnSurfaceVariant">#49454F</color> <color name="colorOutline">#79747E</color>
+    <color name="colorPrimary">#000000</color> <color name="colorSecondary">#03DAC5</color> <color name="colorSurface">#FFFFFF</color> <color name="colorOnPrimary">#0D0C0C</color> <color name="colorOnSurface">#1C1B1F</color> <color name="colorOnSurfaceVariant">#49454F</color> <color name="colorOutline">#79747E</color>
     <color name="color_power_off">#D32F2F</color>
     <color name="color_power_on">#388E3C</color>
     <color name="lightgray">#fff</color>
     <color name="power_button_on_color">#388E3C</color>
     <color name="power_button_off_color">#D32F2F</color>
+    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorAccent">#4CAF50</color>
 </resources>

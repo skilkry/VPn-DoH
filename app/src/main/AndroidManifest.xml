@@ -11,7 +11,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="DNS VPN"
         android:theme="@style/Theme.DnsVpn">
-
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="Acerca de">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <!-- Declaración del servicio VPN -->
         <service
             android:name="com.ventaone.dnsvpn.DnsVpnService"
@@ -24,7 +32,6 @@
 
 
 
-        <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
