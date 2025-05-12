@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DNS Protocol options -->
+    <string-array name="dns_protocol_entries">
+        <item>DNS over HTTPS (DoH)</item>
+        <item>DNS over TLS (DoT)</item>
+        <item>DNS over QUIC (DoQ)</item>
+        <item>DNS estándar (No seguro)</item>
+    </string-array>
+
+    <string-array name="dns_protocol_values">
+        <item>doh</item>
+        <item>dot</item>
+        <item>doq</item>
+        <item>plain</item>
+    </string-array>
+
+    <!-- Posibles servidores DNS predefinidos -->
+    <string-array name="predefined_dns_servers_entries">
+        <item>Cloudflare (1.1.1.1)</item>
+        <item>Google (8.8.8.8)</item>
+        <item>Quad9 (9.9.9.9)</item>
+        <item>OpenDNS (208.67.222.222)</item>
+        <item>AdGuard DNS (94.140.14.14)</item>
+        <item>Personalizado</item>
+    </string-array>
+
+    <string-array name="predefined_dns_servers_values">
+        <item>https://cloudflare-dns.com/dns-query</item>
+        <item>https://dns.google/dns-query</item>
+        <item>https://dns.quad9.net/dns-query</item>
+        <item>https://doh.opendns.com/dns-query</item>
+        <item>https://dns.adguard.com/dns-query</item>
+        <item>custom</item>
+    </string-array>
+
+    <!-- Frecuencia de actualización de la caché DNS -->
+    <string-array name="dns_cache_refresh_entries">
+        <item>Cada 15 minutos</item>
+        <item>Cada 30 minutos</item>
+        <item>Cada hora</item>
+        <item>Cada 3 horas</item>
+        <item>Cada 6 horas</item>
+        <item>Cada 12 horas</item>
+        <item>Cada día</item>
+        <item>Nunca (manual)</item>
+    </string-array>
+
+    <string-array name="dns_cache_refresh_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>720</item>
+        <item>1440</item>
+        <item>0</item>
+    </string-array>
+</resources>
