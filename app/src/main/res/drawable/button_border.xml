@@ -1,7 +1,30 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@android:color/black"/> <!-- Fondo transparente -->
-    <stroke
-        android:width="2.5dp"
-        android:color="#376EEF"/> <!-- Borde morado turquesa -->
-    <corners android:radius="12dp"/>
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#4dffd9">
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <!-- Fondo semi-transparente con un tono más oscuro -->
+            <solid android:color="#26181818" />
+
+            <!-- Esquinas redondeadas más pronunciadas -->
+            <corners android:radius="10dp" />
+
+            <!-- Gradiente sutil -->
+            <gradient
+                android:startColor="#26181818"
+                android:endColor="#26222222"
+                android:angle="270" />
+
+            <!-- Borde más fino y menos saturado -->
+            <stroke
+                android:width="1dp"
+                android:color="#3300c2a0" />
+        </shape>
+    </item>
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="#33FFFFFF" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</ripple>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Círculo base oscuro para estado OFF -->
+    <path
+        android:fillColor="#303030"
+        android:pathData="M100,10 a90,90 0 1,0 0,180 a90,90 0 1,0 0,-180" />
+
+    <!-- Efectos de iluminación sutil, borde tenue -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.15"
+        android:fillColor="#00000000"
+        android:pathData="M100,10 a90,90 0 1,0 0,180 a90,90 0 1,0 0,-180" />
+
+    <!-- Resplandor exterior -->
+    <path
+        android:strokeColor="#333333"
+        android:strokeWidth="8"
+        android:strokeAlpha="0.5"
+        android:fillColor="#00000000"
+        android:pathData="M100,6 a94,94 0 1,0 0,188 a94,94 0 1,0 0,-188" />
+
+    <!-- Sutil anillo interior -->
+    <path
+        android:strokeColor="#666666"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.2"
+        android:fillColor="#00000000"
+        android:pathData="M100,25 a75,75 0 1,0 0,150 a75,75 0 1,0 0,-150" />
+
+    <!-- Símbolo de encendido estilo moderno - parte 1: círculo incompleto -->
+    <path
+        android:strokeColor="#AAAAAA"
+        android:strokeWidth="12"
+        android:strokeAlpha="0.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M100,100 m0,-35 a35,35 0 1,1 0,70 a35,35 0 1,1 0,-70" />
+
+
+    <!-- Símbolo de encendido estilo moderno - parte 2: línea vertical -->
+    <path
+        android:strokeColor="#AAAAAA"
+        android:strokeWidth="12"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.8"
+        android:fillColor="#00000000"
+        android:pathData="M100,65 L100,85" />
+</vector>

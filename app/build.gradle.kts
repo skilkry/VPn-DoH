@@ -7,18 +7,19 @@ plugins {
 
 android {
     namespace = "com.ventaone.dnsvpn"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.ventaone.dnsvpn"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
 
     signingConfigs {
         create("release") {
@@ -82,7 +83,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
-
+    implementation("com.caverock:androidsvg:1.4")
+    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.0")
+    implementation(libs.androidx.media3.common.ktx)
     // Jetpack Compose
     val composeVersion = "1.4.0"
     implementation("androidx.compose.ui:ui:$composeVersion")

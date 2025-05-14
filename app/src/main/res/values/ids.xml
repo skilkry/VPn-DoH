@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Identificador para la animación de pulso -->
+    <item name="pulse_animator_tag" type="id" />
+    <item name="powerButton" type="id"/>
+</resources>

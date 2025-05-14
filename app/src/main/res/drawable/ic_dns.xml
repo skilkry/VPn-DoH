@@ -1,5 +1,54 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
-        
-    <path android:fillColor="#FF000000" android:pathData="M17.6,11.48 L19.44,8.3a0.63,0.63 0,0 0,-1.09 -0.63l-1.88,3.24a11.43,11.43 0,0 0,-8.94 0L5.65,7.67a0.63,0.63 0,0 0,-1.09 0.63L6.4,11.48A10.81,10.81 0,0 0,1 20L23,20A10.81,10.81 0,0 0,17.6 11.48ZM7,17.25A1.25,1.25 0,1 1,8.25 16,1.25 1.25,0 0,1 7,17.25ZM17,17.25A1.25,1.25 0,1 1,18.25 16,1.25 1.25,0 0,1 17,17.25Z"/>
-    
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Nodo central -->
+    <path
+        android:pathData="M12,3.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Nodo izquierdo -->
+    <path
+        android:pathData="M5,11.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Nodo derecho -->
+    <path
+        android:pathData="M19,11.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea izquierda -->
+    <path
+        android:pathData="M10,7.5 L6.5,12"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea derecha -->
+    <path
+        android:pathData="M14,7.5 L17.5,12"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Paquetes de datos como círculos fijos -->
+    <path
+        android:pathData="M8,9.3a0.7,0.7 0 1,0 0,1.4a0.7,0.7 0 1,0 0,-1.4"
+        android:fillColor="#00c2a0"
+        android:fillAlpha="0.8" />
+
+    <path
+        android:pathData="M16,9.3a0.7,0.7 0 1,0 0,1.4a0.7,0.7 0 1,0 0,-1.4"
+        android:fillColor="#00c2a0"
+        android:fillAlpha="0.8" />
 </vector>

@@ -1,48 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/values/styles.xml -->
 <resources>
     <!-- Base application theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Colores primarios -->
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/bkg</item>
+
+        <!-- Estilo para ventana transparente -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
+        <!-- Estilo de texto en app -->
         <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="fontFamily">@font/poppins_regular</item>
 
-        <!-- Preference theme settings -->
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Custom</item>
+        <!-- Estilo de componentes Material -->
+        <item name="materialCardViewStyle">@style/AppCard</item>
+        <item name="materialButtonStyle">@style/AppButton</item>
+    </style>
+    <style name="SecurityAuditTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <!-- Custom preference theme overlay -->
-    <style name="PreferenceThemeOverlay.Custom" parent="PreferenceThemeOverlay">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textColorSecondary">#CCCCCC</item>
-        <item name="android:divider">@android:color/transparent</item>
-        <item name="android:dividerHeight">0dp</item>
+    <!-- Style for audit item description -->
+    <style name="SecurityAuditDescription">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/gray_dark</item>
     </style>
 
-    <!-- Custom dialog theme for EditTextPreference and ListPreference -->
-    <style name="CustomPreferenceDialogTheme" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/dialog_background</item>
-        <item name="android:textColor">#FFFFFF</item>
+    <!-- Style for audit item details -->
+    <style name="SecurityAuditDetails">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+    <!-- Estilo para tarjetas -->
+    <style name="AppCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">8dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="rippleColor">#33FFFFFF</item>
+    </style>
+    <style name="ActivityAnimation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_up</item>
+        <item name="android:activityCloseEnterAnimation">@anim/pulse</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_up</item>
+    </style>
+    <style name="AboutFeatureItem">
+        <item name="android:textColor">#CCCCCC</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:layout_marginBottom">8dp</item>
     </style>
-
-    <!-- Custom button style for preference dialogs -->
-    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_border</item>
-        <item name="android:textColor">#FFFFFF</item>
+    <!-- Estilo para botones -->
+    <style name="AppButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.01</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="rippleColor">#33FFFFFF</item>
+    </style>
+    <style name="CustomSwitchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/switch_thumb_selector</item>
+        <item name="trackTint">@color/switch_track_selector</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+    <!-- Estilo para título en toolbar -->
+    <style name="ToolbarTitleStyle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <!-- Estilo para botón flotante de ajustes -->
+    <style name="SettingsFab" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">#44FFFFFF</item>
+        <item name="tint">#FFFFFF</item>
+        <item name="rippleColor">#80FFFFFF</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
     </style>
 
-    <!-- Custom switch style -->
-    <style name="CustomSwitchStyle" parent="Widget.AppCompat.CompoundButton.Switch">
-        <item name="android:thumbTint">@color/switch_thumb_selector</item>
-        <item name="android:trackTint">@color/switch_track_selector</item>
+    <!-- Estilo para chips de estado -->
+    <style name="StatusChip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipMinHeight">32dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipBackgroundColor">#66FF5252</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- Estilo para chip de estado conectado -->
+    <style name="StatusChip.Connected">
+        <item name="chipBackgroundColor">#664CAF50</item>
     </style>
 </resources>

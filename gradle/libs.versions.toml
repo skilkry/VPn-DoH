@@ -21,6 +21,7 @@ composeBom = "2024.09.00"
 material = "1.12.0"
 playServicesAds = "24.1.0"
 recyclerview = "1.4.0"
+media3CommonKtx = "1.6.1"
 
 [libraries]
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -49,6 +50,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 libs-junit = { module = "libs.junit:junit", version.ref = "libsJunit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

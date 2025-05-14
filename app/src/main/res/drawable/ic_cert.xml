@@ -1,5 +1,64 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:tint="#000000" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp">
-        
-    <path android:fillColor="#FF000000" android:pathData="M17.6,11.48 L19.44,8.3a0.63,0.63 0,0 0,-1.09 -0.63l-1.88,3.24a11.43,11.43 0,0 0,-8.94 0L5.65,7.67a0.63,0.63 0,0 0,-1.09 0.63L6.4,11.48A10.81,10.81 0,0 0,1 20L23,20A10.81,10.81 0,0 0,17.6 11.48ZM7,17.25A1.25,1.25 0,1 1,8.25 16,1.25 1.25,0 0,1 7,17.25ZM17,17.25A1.25,1.25 0,1 1,18.25 16,1.25 1.25,0 0,1 17,17.25Z"/>
-    
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Marco del certificado -->
+    <path
+        android:pathData="M4,5 L4,17 L12,17 L12,5 Z"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea 1 -->
+    <path
+        android:pathData="M6,8 L10,8"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea 2 -->
+    <path
+        android:pathData="M6,11 L10,11"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea 3 -->
+    <path
+        android:pathData="M6,14 L8,14"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Sello (círculo) -->
+    <path
+        android:pathData="M17,9a4,4 0 1,0 0.001,8A4,4 0 1,0 17,9Z"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Check del sello -->
+    <path
+        android:pathData="M15,13 L16.5,14.5 L19,12"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Cinta -->
+    <path
+        android:pathData="M17,9 L17,5 L12,5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
 </vector>

@@ -1,149 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:background="@drawable/bkg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bkg">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#29121212"
-            app:title="@string/my_app"
-            app:titleTextColor="#fff"/>
-
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end"
-            android:padding="16dp">
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
 
-            <ImageButton
-                android:id="@+id/btnServer"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="Configuración"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_settings" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#29121212"
+                app:title="@string/my_app"
+                app:titleTextColor="#fff"
+                app:titleTextAppearance="@style/ToolbarTitleStyle" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/dnsButton"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button_border"
-                android:textColor="#fff"
-                android:fontFamily="@font/poppins_regular"
-                android:text="DNS"
-                android:textSize="14sp"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/certsButton"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button_border"
-                android:textColor="#fff"
-                android:text="Certs"
-                android:fontFamily="@font/poppins_regular"
-                android:textSize="14sp"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/serverButton"
-                android:fontFamily="@font/poppins_regular"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button_border"
-                android:textColor="#fff"
-                android:text="Server"
-                android:textSize="14sp"/>
-
-        </LinearLayout>
-
-        <FrameLayout
+        <!-- Contenido principal con NestedScrollView para mejor compatibilidad -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageButton
-                        android:id="@+id/powerButton"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:background="@drawable/button_background_green"
-                        android:contentDescription="Botón de encendido"
-                        android:scaleType="fitCenter"
-                        android:src="@null" />
+                <!-- Botón de encendido mejorado -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/powerButtonContainer"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:cardCornerRadius="100dp"
+                    app:cardElevation="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.4"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="#80FFFFFF"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="#33FFFFFF">
 
-                    <ImageView
-                        android:id="@+id/powerIcon"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/power_on" />
-                </RelativeLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                <LinearLayout
+                        <!-- Usando ImageView normal con recursos convertidos a PNG -->
+                        <ImageView
+                            android:id="@+id/powerButtonBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitCenter"
+                            tools:src="@android:drawable/btn_default"
+                            android:contentDescription="@string/power_button_background" />
+
+                        <!-- Usando ImageView normal con recursos convertidos a PNG -->
+                        <ImageView
+                            android:id="@+id/powerIcon"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            tools:src="@android:drawable/ic_media_play"
+                            android:contentDescription="@string/power_button" />
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Indicador de estado -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/statusIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/powerButtonContainer"
+                    app:layout_constraintWidth_max="340dp"
+                    android:backgroundTint="#40101010">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Estado de conexión -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/connectionStatusIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                tools:src="@android:drawable/ic_dialog_info"
+                                android:contentDescription="@string/connection_status" />
+
+                            <TextView
+                                android:id="@+id/connectionStatusText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/disconnected"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp"
+                                android:fontFamily="@font/poppins_regular" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/connectionStatusChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/offline"
+                                app:chipBackgroundColor="#66FF5252"
+                                app:chipMinHeight="32dp"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Estado del certificado -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="12dp">
+
+                            <ImageView
+                                android:id="@+id/certStatusIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                tools:src="@android:drawable/ic_secure"
+                                android:contentDescription="@string/cert_status_icon" />
+
+                            <TextView
+                                android:id="@+id/certStatusText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/cert_status_default"
+                                android:textColor="#CCCCCC"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/poppins_regular" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Botones de configuración flotantes -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:layout_margin="16dp"
+                    android:contentDescription="@string/settings"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_settings"
+                    app:backgroundTint="#44FFFFFF"
+                    app:tint="#FFFFFF"
+                    app:borderWidth="0dp"
+                    app:elevation="6dp" />
 
-                    <ImageView
-                        android:id="@+id/certStatusIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/cert_status_gray"
-                        android:textColor="#fff"
-                        android:contentDescription="Estado del certificado" />
+                <!-- Panel de configuración expandible -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/configPanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/fabSettings"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    android:backgroundTint="#66000000">
 
-                    <TextView
-                        android:id="@+id/certStatusText"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Estado: Sin verificar"
-                        android:textColor="#fff"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                </LinearLayout>
-            </LinearLayout>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/dnsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dns"
+                            app:icon="@drawable/ic_dns"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppins_regular"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            app:strokeColor="#40FFFFFF"
+                            app:iconTint="#4DFFD9"
+                            android:layout_marginBottom="8dp" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/certsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/certs"
+                            app:icon="@drawable/ic_cert"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppins_regular"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            app:strokeColor="#40FFFFFF"
+                            app:iconTint="#4DFFD9"
+                            android:layout_marginBottom="8dp" />
 
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="150dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-        </LinearLayout>
-    </LinearLayout>
-
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/serverButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/server"
+                            app:icon="@drawable/ic_server"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/poppins_regular"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            app:strokeColor="#40FFFFFF"
+                            app:iconTint="#4DFFD9" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

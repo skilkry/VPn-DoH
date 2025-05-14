@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_background">
+
+    <Button
+        android:id="@+id/btnDns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DNS"
+        android:background="@drawable/button_border"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btnCerts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Certs"
+        android:background="@drawable/button_border"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btnServer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Server"
+        android:background="@drawable/button_border"
+        android:textColor="#fff" />
+
+</LinearLayout>

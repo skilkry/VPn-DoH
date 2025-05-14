@@ -7,4 +7,58 @@
     <color name="power_button_off_color">#D32F2F</color>
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#4CAF50</color>
+
+        <!-- Colores para estados del botón -->
+        <color name="buttonOn">#00C2A0</color>
+        <color name="buttonOff">#424242</color>
+        <color name="buttonDisabled">#757575</color>
+
+        <!-- Colores para estados de conexión -->
+        <color name="statusConnected">#4CAF50</color>
+        <color name="statusConnecting">#FFC107</color>
+        <color name="statusDisconnected">#FF5252</color>
+    <color name="white">#fff</color>
+        <!-- Colores para estado de certificados -->
+        <color name="certValid">#4CAF50</color>
+        <color name="certWarning">#FFC107</color>
+        <color name="certInvalid">#FF5252</color>
+        <color name="certUnknown">#BDBDBD</color>
+
+        <!-- Colores para efectos visuales -->
+        <color name="glowEffect">#664DFFD9</color>
+        <color name="overlayDark">#66000000</color>
+        <color name="cardBackground">#40101010</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_stroke">#E0E0E0</color>
+    <color name="background_start">#B2303137</color>
+    <color name="background_end">#9D5D5D61</color>
+    <color name="light_gray">#AAAAAA</color>
+    <color name="background_dark">#121212</color>
+    <color name="background_translucent">#30FFFFFF</color>
+    <color name="card_overlay">#26FFFFFF</color>
+    <color name="status_pass">#4CAF50</color>       <!-- Verde -->
+    <color name="status_warning">#FFC107</color>    <!-- Amarillo -->
+    <color name="status_fail">#F44336</color>       <!-- Rojo -->
+
+    <!-- Colores adicionales para la UI -->
+    <color name="black">#000000</color>
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray">#9E9E9E</color>
+    <color name="gray_dark">#616161</color>
+    <!-- Neón -->
+    <color name="neon_cyan">#4DFFD9</color>
+    <color name="neon_purple">#B388FF</color>
+
+    <!-- Texto -->
+
+    <color name="text_tertiary">#888888</color>
+
+    <!-- Botones -->
+    <color name="button_background">#1A1A1A</color>
+    <color name="button_tint">#4DFFD9</color>
+
+    <!-- Otros -->
+    <color name="github_icon_tint">#FFFFFF</color>
 </resources>

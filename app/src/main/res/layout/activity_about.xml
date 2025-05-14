@@ -1,149 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff"
-    tools:context=".AboutActivity">
+    android:background="@drawable/bkg"
+    android:fitsSystemWindows="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
-    <ScrollView
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#29121212"
+            app:titleTextColor="#FFFFFF"
+            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:gravity="center_horizontal"
+            android:paddingBottom="32dp">
 
             <ImageView
-                android:id="@+id/appLogo"
+                android:id="@+id/logoContainer"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_launcher_foreground"
+                android:layout_marginTop="24dp"
+                android:contentDescription="App Logo" />
 
             <TextView
                 android:id="@+id/appNameText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text="DNS VPN"
-                android:textColor="#000000"
+                android:text="@string/app_name"
+                android:textColor="#FFFFFF"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginTop="12dp" />
 
             <TextView
                 android:id="@+id/versionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Versión X.X.X"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_regular"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/descriptionCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Versión 1.0.0"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="#30FFFFFF">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:background="#E0E0E0" />
-
-            <TextView
-                android:id="@+id/descriptionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="4dp"
-                android:text="DNS VPN es una aplicación que te permite proteger tu privacidad al cifrar tus consultas DNS mediante DNS-over-HTTPS. Evita que tu proveedor de internet espíe tus actividades en línea y mejora tu seguridad en internet."
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/about_description"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins_regular" />
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/featuresTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp"
-                android:text="Características principales:"
-                android:textColor="#000000"
+                android:text="Características"
+                android:textColor="#4DFFD9"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/poppins_regular"
+                android:layout_marginTop="24dp" />
 
-            <TextView
-                android:id="@+id/featuresList"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/featuresCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="8dp"
-                android:text="• Consultas DNS cifradas mediante HTTPS\n• Verificación de certificados SSL\n• Soporte para DNS personalizados\n• Certificate Pinning para mayor seguridad\n• Interfaz simple e intuitiva"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#26FFFFFF">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:background="#E0E0E0" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/feature1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AboutFeatureItem"
+                        android:text="Sin registros (No-logs)" />
+                    <TextView
+                        android:id="@+id/feature2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AboutFeatureItem"
+                        android:text="Cifrado DNS seguro" />
+                    <TextView
+                        android:id="@+id/feature3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AboutFeatureItem"
+                        android:text="Fuente libre y abierta" />
+                    <TextView
+                        android:id="@+id/feature4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AboutFeatureItem"
+                        android:text="Diseño enfocado en privacidad" />
+                    <TextView
+                        android:id="@+id/feature5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AboutFeatureItem"
+                        android:text="Totalmente gratuito" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/developerTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Desarrollado por:"
-                android:textColor="#000000"
+                android:text="Desarrollador"
+                android:textColor="#4DFFD9"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/poppins_regular"
+                android:layout_marginTop="24dp" />
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/developerCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#26FFFFFF">
 
-                <TextView
-                    android:id="@+id/developerName"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="VentaOne"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
-                <ImageButton
-                    android:id="@+id/githubButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="GitHub"
-                    android:src="@drawable/ic_github" />
-            </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/githubButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="#4DFFD9"
+                        android:background="@drawable/github_button_background"
+                        android:src="@drawable/ic_github"
+                        android:contentDescription="@string/github_profile"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="VentaOne Team"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/poppins_regular" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/licenseText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="VentaOne © 2025"
+                android:textColor="#888888"
+                android:textSize="12sp"
                 android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="© 2025 VentaOne. Todos los derechos reservados."
-                android:textColor="#000000"
-                android:textSize="14sp" />
-
+                android:fontFamily="@font/poppins_regular" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

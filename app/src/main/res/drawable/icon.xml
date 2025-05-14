@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Fondo oscuro -->
+    <path
+        android:fillColor="#121212"
+        android:pathData="M40,0L160,0A40,40 0,0 1,200 40L200,160A40,40 0,0 1,160 200L40,200A40,40 0,0 1,0 160L0,40A40,40 0,0 1,40 0z" />
+
+    <!-- Capas del túnel -->
+    <path android:fillColor="#1a1a1a" android:pathData="M100,15A85,85 0,1 1,15 100,85 85,0 0,1 100,15z" />
+    <path android:fillColor="#212121" android:pathData="M100,30A70,70 0,1 1,30 100,70 70,0 0,1 100,30z" />
+    <path android:fillColor="#2a2a2a" android:pathData="M100,45A55,55 0,1 1,45 100,55 55,0 0,1 100,45z" />
+    <path android:fillColor="#333333" android:pathData="M100,60A40,40 0,1 1,60 100,40 40,0 0,1 100,60z" />
+    <path android:fillColor="#3d3d3d" android:pathData="M100,75A25,25 0,1 1,75 100,25 25,0 0,1 100,75z" />
+
+    <!-- Líneas convergentes -->
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M23,23L85,85" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M177,23L115,85" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M23,177L85,115" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M177,177L115,115" />
+
+    <!-- Líneas adicionales -->
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M15,100L85,100" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M185,100L115,100" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M100,15L100,85" />
+    <path android:strokeColor="#2a2a2a" android:strokeWidth="2" android:pathData="M100,185L100,115" />
+
+    <!-- Luz azul verdosa -->
+    <path android:fillColor="#00c2a0" android:pathData="M100,86A14,14 0,1 1,86 100,14 14,0 0,1 100,86z" />
+    <path android:fillColor="#4dffd9" android:pathData="M100,93A7,7 0,1 1,93 100,7 7,0 0,1 100,93z" />
+
+    <!-- Resplandor -->
+    <path android:strokeColor="#00c2a0" android:strokeWidth="2" android:fillColor="#00000000"
+        android:pathData="M100,80A20,20 0,1 1,80 100,20 20,0 0,1 100,80z"
+        android:strokeAlpha="0.3" />
+</vector>
