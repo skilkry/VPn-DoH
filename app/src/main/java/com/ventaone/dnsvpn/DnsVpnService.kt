@@ -36,13 +36,15 @@ class DnsVpnService : VpnService(), Runnable {
 
     private var vpnInterface: ParcelFileDescriptor? = null
     private lateinit var client: OkHttpClient
-    @Volatile private var isRunning = false
+    private var isRunning = false
     private var thread: Thread? = null
-    private var serverUrl = "https://cloudflare-dns.com/dns-query"
+    private var serverUrl = "https://cloudflare-dns.com/dns-query" // Default value
     private lateinit var certificateMonitor: CertificateMonitor
+    private lateinit var dnsLeakProtection: DnsLeakProtection
+    private var blockedDnsServers: List<String> = emptyList()
 
     companion object {
-        @Volatile var isServiceRunning = false
+        var isServiceRunning = false
         var isCertificatePinningFailed = false
         const val ACTION_RESTART_VPN = "com.ventaone.dnsvpn.ACTION_RESTART_VPN"
         private const val TAG = "DnsVpnService"
@@ -52,24 +54,22 @@ class DnsVpnService : VpnService(), Runnable {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, "[DEBUG] DnsVpnService.onCreate")
         certificateMonitor = CertificateMonitor(this)
+        dnsLeakProtection = DnsLeakProtection(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "[DEBUG] DnsVpnService.onStartCommand. Action: ${intent?.action}")
         if (intent?.action == "STOP_VPN") {
             stopVpn()
             return START_NOT_STICKY
         }
 
-        if (thread == null || !isRunning) {
-            Log.d(TAG, "[DEBUG] El hilo es nulo o no está corriendo, iniciando secuencia de arranque.")
+        if (thread == null) {
             loadDnsServers()
+            loadLeakProtectionConfig()
             client = createProtectedHttpClient()
 
             if (isCertificatePinningFailed) {
-                Log.e(TAG, "[DEBUG] Fallo de anclaje de certificado detectado ANTES de establecer. Deteniendo.")
                 Toast.makeText(this, "Error de anclaje de certificado. Verifíquelo en la app.", Toast.LENGTH_LONG).show()
                 stopVpn()
                 return START_NOT_STICKY
@@ -77,147 +77,71 @@ class DnsVpnService : VpnService(), Runnable {
 
             vpnInterface = establish()
             if (vpnInterface != null) {
-                Log.d(TAG, "[DEBUG] Interfaz VPN establecida correctamente.")
                 isRunning = true
                 thread = Thread(this, "DnsVpnThread")
                 thread?.start()
                 isServiceRunning = true
-                showVpnNotification("VPN Activa (Solo DNS)", "El servicio DNS está protegiendo tus consultas.") // Título modificado
+                showVpnNotification("VPN Activa", "El servicio DNS está protegiendo tu red.")
             } else {
-                Log.e(TAG, "[DEBUG] La interfaz VPN no se pudo establecer. Deteniendo servicio.")
                 stopSelf()
             }
-        } else {
-            Log.d(TAG, "[DEBUG] onStartCommand llamado pero el hilo ya existe y está corriendo.")
         }
         return START_STICKY
     }
 
     override fun run() {
-        Log.d(TAG, "[DEBUG] RUN: Hilo de la VPN iniciado. Entrando en bucle de lectura.")
-        // Es crucial que vpnInterface no sea null aquí.
-        // La lógica en onStartCommand debería asegurar esto o detener el servicio.
-        val currentVpnInterface = vpnInterface ?: run {
-            Log.e(TAG, "[DEBUG] RUN: vpnInterface es null al inicio de run(). Deteniendo hilo.")
-            isRunning = false
-            return
-        }
-        val vpnInput = FileInputStream(currentVpnInterface.fileDescriptor)
-        val vpnOutput = FileOutputStream(currentVpnInterface.fileDescriptor)
+        Log.d(TAG, "Hilo de la VPN iniciado.")
+        val vpnInput = FileInputStream(vpnInterface?.fileDescriptor)
+        val vpnOutput = FileOutputStream(vpnInterface?.fileDescriptor)
         val packetBuffer = ByteBuffer.allocate(32767)
 
         try {
             while (isRunning) {
                 val size = vpnInput.read(packetBuffer.array())
                 if (size > 0) {
-                    Log.d(TAG, "[DEBUG] RUN: Leídos $size bytes del túnel VPN.")
                     packetBuffer.limit(size)
+                    val ipHeader = PacketParser.parseIP4Header(packetBuffer)
 
-                    try {
-                        val currentPacket = packetBuffer.duplicate()
-                        val ipHeader = PacketParser.parseIP4Header(currentPacket)
-                        Log.d(TAG, "[DEBUG] RUN: Paquete IPV4 parseado. Protocolo: ${ipHeader.protocol}, Origen: ${ipHeader.sourceAddress.hostAddress}, Destino: ${ipHeader.destinationAddress.hostAddress}")
-
-                        if (ipHeader.protocol == Protocol.UDP) {
-                            val udpPacketForDns = packetBuffer.duplicate()
-                            val udpHeader = PacketParser.parseUDPHeader(udpPacketForDns)
-                            Log.d(TAG, "[DEBUG] RUN: Paquete UDP parseado. Puerto Origen: ${udpHeader.sourcePort}, Puerto Destino: ${udpHeader.destinationPort}")
-
-                            // Solo procesamos paquetes DNS dirigidos a nuestro servidor DNS virtual
-                            if (udpHeader.destinationPort == 53 && ipHeader.destinationAddress.hostAddress == "10.0.0.1") {
-                                Log.d(TAG, "[DEBUG] RUN: Paquete DNS para nuestro resolvedor detectado! Lanzando hilo.")
+                    if (ipHeader.protocol == Protocol.UDP) {
+                        val udpHeader = PacketParser.parseUDPHeader(packetBuffer)
+                        if (udpHeader.destinationPort == 53) {
+                            val destIp = ipHeader.destinationAddress.hostAddress
+                            if (destIp in blockedDnsServers) {
+                                Log.w(TAG, "Paquete DNS a servidor bloqueado ($destIp) descartado.")
+                            } else {
                                 thread {
                                     handleDnsQuery(packetBuffer.duplicate(), vpnOutput)
                                 }
-                            } else {
-                                // Si no es un paquete DNS para nuestro servidor virtual, lo ignoramos.
-                                // El sistema operativo debería enrutarlo por la red física si no hay ruta global en la VPN.
-                                Log.d(TAG, "[DEBUG] RUN: Paquete UDP (Destino: ${ipHeader.destinationAddress.hostAddress}:${udpHeader.destinationPort}) ignorado por el manejador DNS.")
                             }
-                        } else {
-                            // Ignoramos paquetes no UDP (ej. TCP). El sistema debería enrutarlos por la red física.
-                            Log.d(TAG, "[DEBUG] RUN: Paquete NO UDP (Protocolo: ${ipHeader.protocol}) ignorado por el manejador DNS.")
                         }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "[DEBUG] RUN: Error al parsear paquete IP/UDP. Ignorando.", e)
                     }
-                } else if (size == 0) {
-                    // Continue
-                } else {
-                    Log.e(TAG, "[DEBUG] RUN: Error al leer del túnel VPN, read() devolvió $size. Saliendo del bucle.")
-                    isRunning = false
                 }
                 packetBuffer.clear()
             }
-        } catch (e: IOException) {
-            if (isRunning) {
-                Log.e(TAG, "[DEBUG] RUN: IOException en el bucle de lectura (puede ser por cierre de interfaz). Error: ${e.message}", e)
-            } else {
-                Log.d(TAG, "[DEBUG] RUN: IOException (esperada por cierre) en el bucle de lectura.")
-            }
         } catch (e: Exception) {
-            if (isRunning) {
-                Log.e(TAG, "[DEBUG] RUN: Error crítico (no IOException) en el bucle de lectura.", e)
-            }
+            if (isRunning) Log.e(TAG, "Error en el hilo de la VPN", e)
         } finally {
-            Log.d(TAG, "[DEBUG] RUN: Hilo finalizando. Saliendo del bucle de lectura.")
-        }
-    }
-
-    private fun stopVpn() {
-        Log.d(TAG, "[DEBUG] stopVpn() llamado.")
-        isRunning = false
-
-        val oldThread = thread
-        thread = null
-
-        oldThread?.interrupt()
-
-        try {
-            vpnInterface?.close()
-            Log.d(TAG, "[DEBUG] Interfaz VPN cerrada.")
-        } catch (e: IOException) {
-            Log.e(TAG, "[DEBUG] Error al cerrar vpnInterface", e)
-        } finally {
-            vpnInterface = null
-            isServiceRunning = false
-            stopForeground(true)
-            stopSelf()
-            Log.d(TAG, "[DEBUG] Servicio VPN y notificación detenidos. stopSelf() llamado.")
+            stopVpn()
         }
     }
 
     private fun handleDnsQuery(queryPacket: ByteBuffer, vpnOutput: FileOutputStream) {
-        Log.d(TAG, "[DEBUG] DNS_HANDLER: Iniciando manejo de consulta DNS.")
         try {
-            val queryPacketCopy = queryPacket.duplicate() // Usar una copia para no afectar el original en otros hilos
-            val (domain, _) = DNSPacketBuilder.extractDomainAndIdFromQuery(queryPacketCopy) ?: run { // queryPacketCopy se consume aquí
-                Log.w(TAG, "[DEBUG] DNS_HANDLER: No se pudo extraer el dominio. Abortando.")
-                return
-            }
-            Log.d(TAG, "[DEBUG] DNS_HANDLER: Dominio extraído: '$domain'. Realizando consulta DoH.")
-
+            val (domain, _) = DNSPacketBuilder.extractDomainAndIdFromQuery(queryPacket) ?: return
             val ips = performDohQuery(domain)
 
-            // Necesitamos el queryPacket original (o una copia intacta desde el inicio del IP)
-            // para construir la respuesta completa.
-            val originalPacketForResponse = queryPacket.duplicate()
-            originalPacketForResponse.position(0) // Asegurar que está al inicio
-
             val responsePacket = if (ips.isNotEmpty()) {
-                Log.d(TAG, "[DEBUG] DNS_HANDLER: Consulta DoH exitosa para '$domain'. IPs: $ips. Construyendo respuesta.")
-                DNSPacketBuilder.buildDnsResponse(originalPacketForResponse, ips)
+                DNSPacketBuilder.buildDnsResponse(queryPacket, ips)
             } else {
-                Log.w(TAG, "[DEBUG] DNS_HANDLER: Consulta DoH para '$domain' falló. Construyendo respuesta de error (SERVFAIL).")
-                DNSPacketBuilder.buildDnsErrorResponse(originalPacketForResponse)
+                Log.w(TAG, "La consulta DoH para '$domain' falló o no devolvió IPs. Enviando SERVFAIL.")
+                DNSPacketBuilder.buildDnsErrorResponse(queryPacket)
             }
 
             synchronized(vpnOutput) {
                 vpnOutput.write(responsePacket.array(), 0, responsePacket.limit())
-                Log.d(TAG, "[DEBUG] DNS_HANDLER: Respuesta DNS para '$domain' escrita en el túnel.")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[DEBUG] DNS_HANDLER: Error al manejar la consulta DNS.", e)
+            Log.e(TAG, "Error al manejar la consulta DNS", e)
         }
     }
 
@@ -226,58 +150,32 @@ class DnsVpnService : VpnService(), Runnable {
         val requestBody = queryData.toRequestBody("application/dns-message".toMediaTypeOrNull())
         val request = Request.Builder().url(serverUrl).post(requestBody).addHeader("Accept", "application/dns-message").build()
         try {
-            Log.d(TAG, "[DEBUG] DOH: Enviando petición para '$domain' a $serverUrl")
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
-                Log.d(TAG, "[DEBUG] DOH: Respuesta exitosa para '$domain'")
                 return DNSPacketBuilder.parseDnsResponseFromDoH(response.body?.bytes() ?: byteArrayOf())
             } else {
-                Log.e(TAG, "[DEBUG] DOH: Respuesta NO exitosa para $domain: ${response.code} ${response.message}")
+                Log.e(TAG, "Respuesta DoH no exitosa para $domain: ${response.code} ${response.message}")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[DEBUG] DOH: EXCEPCIÓN en la petición para '$domain'", e)
+            Log.e(TAG, "La petición DoH falló para el dominio $domain", e)
         }
         return emptyList()
     }
 
     private fun createProtectedHttpClient(): OkHttpClient {
-        Log.d(TAG, "[DEBUG] Creando cliente HTTP protegido...")
         val protectedSocketFactory = object : SocketFactory() {
-            override fun createSocket(): Socket {
-                val s = Socket()
-                Log.d(TAG, "[DEBUG] PROTECT: Protegiendo socket (sin args) $s")
-                protect(s)
-                return s
-            }
-            override fun createSocket(host: String?, port: Int): Socket {
-                val s = Socket(host, port)
-                Log.d(TAG, "[DEBUG] PROTECT: Protegiendo socket (host, port) $s")
-                protect(s)
-                return s
-            }
-            override fun createSocket(host: String?, port: Int, localHost: InetAddress?, localPort: Int): Socket {
-                val s = Socket(host, port, localHost, localPort)
-                Log.d(TAG, "[DEBUG] PROTECT: Protegiendo socket (host, port, localHost, localPort) $s")
-                protect(s)
-                return s
-            }
-            override fun createSocket(host: InetAddress?, port: Int): Socket {
-                val s = Socket(host, port)
-                Log.d(TAG, "[DEBUG] PROTECT: Protegiendo socket (InetAddress, port) $s")
-                protect(s)
-                return s
-            }
-            override fun createSocket(address: InetAddress?, port: Int, localAddress: InetAddress?, localPort: Int): Socket {
-                val s = Socket(address, port, localAddress, localPort)
-                Log.d(TAG, "[DEBUG] PROTECT: Protegiendo socket (InetAddress, port, localAddress, localPort) $s")
-                protect(s)
-                return s
-            }
+            override fun createSocket(): Socket = Socket().also { protect(it) }
+            override fun createSocket(host: String?, port: Int): Socket = Socket(host, port).also { protect(it) }
+            override fun createSocket(host: String?, port: Int, localHost: InetAddress?, localPort: Int): Socket = Socket(host, port, localHost, localPort).also { protect(it) }
+            override fun createSocket(host: InetAddress?, port: Int): Socket = Socket(host, port).also { protect(it) }
+            override fun createSocket(address: InetAddress?, port: Int, localAddress: InetAddress?, localPort: Int): Socket = Socket(address, port, localAddress, localPort).also { protect(it) }
         }
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val hostname = try { URL(serverUrl).host } catch (e: Exception) { "cloudflare-dns.com" }
-        Log.d(TAG, "[DEBUG] Configurando anclaje de certificado para el hostname: '$hostname'")
+        val hostname = try { URL(serverUrl).host } catch (e: Exception) {
+            Log.e(TAG, "URL del servidor inválida: $serverUrl. Usando 'cloudflare-dns.com' como fallback.")
+            "cloudflare-dns.com"
+        }
 
         isCertificatePinningFailed = false
 
@@ -285,15 +183,12 @@ class DnsVpnService : VpnService(), Runnable {
             override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
             override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
             override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                Log.d(TAG, "[DEBUG] TRUST_MANAGER: Verificando certificado del servidor para $hostname")
                 val certificate = chain?.get(0) ?: throw CertificateException("Cadena de certificados vacía")
                 if (!CertificateManager.verifyCertificatePin(certificate, hostname, preferences)) {
                     isCertificatePinningFailed = true
                     showCertificateWarningNotification()
-                    Log.e(TAG, "[DEBUG] TRUST_MANAGER: ¡ANCLAJE DE CERTIFICADO FALLÓ!")
                     throw CertificateException("Anclaje de certificado falló para $hostname.")
                 }
-                Log.d(TAG, "[DEBUG] TRUST_MANAGER: Verificación de certificado exitosa.")
             }
         }
 
@@ -306,36 +201,53 @@ class DnsVpnService : VpnService(), Runnable {
             .build()
     }
 
+    private fun loadLeakProtectionConfig() {
+        blockedDnsServers = dnsLeakProtection.getDnsServersToBlock()
+    }
+
     private fun loadDnsServers() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         serverUrl = preferences.getString("SERVER_URL", "https://cloudflare-dns.com/dns-query") ?: "https://cloudflare-dns.com/dns-query"
-        Log.d(TAG, "[DEBUG] Cargada URL del servidor DoH: $serverUrl")
     }
 
     private fun establish(): ParcelFileDescriptor? {
-        Log.d(TAG, "[DEBUG] establish() llamado...")
         return try {
             val builder = Builder()
             builder.setSession("DnsVpn")
-            builder.addAddress("10.0.0.2", 32) // Dirección para la interfaz VPN
-            builder.addDnsServer("10.0.0.1")   // Servidor DNS que esta VPN interceptará
+            builder.addAddress("10.0.0.2", 32)
 
-            // --- IMPORTANTE: NO AÑADIR RUTA GLOBAL SI SOLO SE QUIERE MANEJAR DNS ---
-            // builder.addRoute("0.0.0.0", 0) // Esta línea haría que TODO el tráfico pase por la VPN.
-            // --- FIN DE LA MODIFICACIÓN IMPORTANTE ---
+            // --- INICIO DE LA CORRECCIÓN DEFINITIVA ---
+            // Usar una IP privada que no será bloqueada por la protección de fugas.
+            builder.addDnsServer("10.0.0.1")
+            // --- FIN DE LA CORRECCIÓN DEFINITIVA ---
 
-            builder.addDisallowedApplication(packageName) // Para que la propia app VPN no use el túnel para sus peticiones DoH.
-
-            Log.d(TAG, "[DEBUG] Configuración de VpnService.Builder completada. Llamando a establish()...")
+            builder.addRoute("0.0.0.0", 0)
+            builder.addDisallowedApplication(packageName)
             builder.establish()
         } catch (e: Exception) {
-            Log.e(TAG, "[DEBUG] Error en VpnService.Builder.establish()", e)
+            Log.e(TAG, "Error al establecer el túnel VPN", e)
             null
         }
     }
 
+    private fun stopVpn() {
+        try {
+            thread?.interrupt()
+            thread = null
+            vpnInterface?.close()
+            vpnInterface = null
+        } catch (e: IOException) {
+            Log.e(TAG, "Error al cerrar vpnInterface", e)
+        } finally {
+            isRunning = false
+            isServiceRunning = false
+            stopForeground(true)
+            stopSelf()
+            Log.d(TAG, "Servicio VPN detenido.")
+        }
+    }
+
     override fun onDestroy() {
-        Log.d(TAG, "[DEBUG] DnsVpnService.onDestroy")
         stopVpn()
         super.onDestroy()
     }
