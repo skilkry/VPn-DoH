@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Nodo central -->
+    <path
+        android:pathData="M12,3.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Nodo izquierdo -->
+    <path
+        android:pathData="M5,11.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Nodo derecho -->
+    <path
+        android:pathData="M19,11.5a2.5,2.5 0 1,0 0,5a2.5,2.5 0 1,0 0,-5"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea izquierda -->
+    <path
+        android:pathData="M10,7.5 L6.5,12"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Línea derecha -->
+    <path
+        android:pathData="M14,7.5 L17.5,12"
+        android:strokeColor="#00c2a0"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Paquetes de datos como círculos fijos -->
+    <path
+        android:pathData="M8,9.3a0.7,0.7 0 1,0 0,1.4a0.7,0.7 0 1,0 0,-1.4"
+        android:fillColor="#00c2a0"
+        android:fillAlpha="0.8" />
+
+    <path
+        android:pathData="M16,9.3a0.7,0.7 0 1,0 0,1.4a0.7,0.7 0 1,0 0,-1.4"
+        android:fillColor="#00c2a0"
+        android:fillAlpha="0.8" />
+</vector>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <rect width="200" height="200" fill="#121212" rx="40" ry="40"/>
+    <circle cx="100" cy="100" r="85" fill="#1a1a1a"/>
+    <circle cx="100" cy="100" r="70" fill="#212121"/>
+    <circle cx="100" cy="100" r="55" fill="#2a2a2a"/>
+    <circle cx="100" cy="100" r="40" fill="#333333"/>
+    <circle cx="100" cy="100" r="25" fill="#3d3d3d"/>
+    <line x1="23" y1="23" x2="85" y2="85" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="177" y1="23" x2="115" y2="85" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="23" y1="177" x2="85" y2="115" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="177" y1="177" x2="115" y2="115" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="15" y1="100" x2="85" y2="100" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="185" y1="100" x2="115" y2="100" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="100" y1="15" x2="100" y2="85" stroke="#2a2a2a" stroke-width="2"/>
+    <line x1="100" y1="185" x2="100" y2="115" stroke="#2a2a2a" stroke-width="2"/>
+    <circle cx="100" cy="100" r="14" fill="#00c2a0">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="100" r="7" fill="#4dffd9">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="100" r="20" fill="none" stroke="#00c2a0" stroke-width="2" opacity="0.3"/>
+</svg>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nombre de la aplicación -->
+    <string name="app_name">VPN DoH</string>
+    <string name="my_app">VPN DoH</string>
+
+    <!-- Botones principales -->
+    <string name="power_button">Botón de encendido</string>
+    <string name="power_button_background">Fondo del botón de encendido</string>
+    <string name="settings">Configuración</string>
+
+    <!-- Botones de configuración -->
+    <string name="dns">DNS</string>
+    <string name="certs">Certificados</string>
+    <string name="server">Servidor</string>
+
+    <!-- Estados de conexión -->
+    <string name="connected">Conectado</string>
+    <string name="connecting">Conectando</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="connection_status">Estado de conexión</string>
+    <string name="online">ONLINE</string>
+    <string name="offline">OFFLINE</string>
+
+    <!-- Estados de certificados -->
+    <string name="cert_status_icon">Estado del certificado</string>
+    <string name="cert_status_default">Sin certificado</string>
+    <string name="cert_status_valid">Certificado válido</string>
+    <string name="cert_status_invalid">Certificado inválido</string>
+    <string name="cert_status_expired">Certificado expirado</string>
+
+    <!-- Información de conexión -->
+    <string name="connection_info">Información de conexión</string>
+    <string name="ip_address">Dirección IP:</string>
+    <string name="ip_not_available">No disponible</string>
+    <string name="traffic_usage">Uso de datos:</string>
+    <string name="traffic_not_available">0 KB</string>
+
+    <!-- Mensajes de estado -->
+    <string name="status_starting">Iniciando servicio VPN…</string>
+    <string name="status_connected">VPN conectada</string>
+    <string name="status_stopping">Deteniendo servicio VPN…</string>
+    <string name="status_disconnected">VPN desconectada</string>
+    <string name="status_error">Error al conectar</string>
+
+    <!-- Mensajes de notificación -->
+    <string name="notification_title">VPN DoH</string>
+    <string name="notification_connected">Servicio VPN activo</string>
+    <string name="notification_disconnected">Servicio VPN inactivo</string>
+
+    <!-- Mensajes de error -->
+    <string name="error_vpn_permission">Se requiere permiso para crear una conexión VPN</string>
+    <string name="error_dns_config">Error en la configuración DNS</string>
+    <string name="error_server_unreachable">Servidor no alcanzable</string>
+    <string name="error_certificate">Error en el certificado</string>
+
+    <!-- Diálogos -->
+    <string name="dialog_title_dns">Configuración DNS</string>
+    <string name="dialog_title_cert">Configuración de certificados</string>
+    <string name="dialog_title_server">Configuración del servidor</string>
+    <string name="dialog_save">Guardar</string>
+    <string name="dialog_cancel">Cancelar</string>
+
+    <!-- Configuración DNS -->
+    <string name="dns_provider">Proveedor DNS:</string>
+    <string name="dns_custom">DNS personalizado:</string>
+    <string name="dns_custom_hint">Ejemplo: 1.1.1.1</string>
+
+    <!-- Configuración de certificados -->
+    <string name="cert_import">Importar certificado</string>
+    <string name="cert_generate">Generar certificado</string>
+    <string name="cert_view">Ver certificados</string>
+    <string name="cert_delete">Eliminar certificado</string>
+
+    <!-- Configuración del servidor -->
+    <string name="server_address">Dirección del servidor:</string>
+    <string name="server_port">Puerto:</string>
+    <string name="server_protocol">Protocolo:</string>
+    <string name="server_username">Usuario:</string>
+    <string name="server_password">Contraseña:</string>
+
+    <!-- Menú lateral -->
+    <string name="menu_home">Inicio</string>
+    <string name="menu_settings">Configuración</string>
+    <string name="menu_about">Acerca de</string>
+    <string name="menu_help">Ayuda</string>
+    <string name="menu_exit">Salir</string>
+    <string name="security_audit_title">Auditoría de Seguridad</string>
+    <string name="perform_security_audit">Realizar Auditoría</string>
+    <string name="security_audit_complete">Auditoría completada: %1$d/%2$d verificaciones aprobadas</string>
+    <string name="status_icon_description">Icono de estado</string>
+    <string name="server_url_summary_default">URL del servidor DoH/para verificación</string>
+    <!-- Títulos para los elementos de auditoría -->
+    <string name="audit_dns_protocol">Protocolo DNS</string>
+    <string name="audit_cert_pinning">Certificate Pinning</string>
+    <string name="audit_dns_leak">Protección contra fugas DNS</string>
+    <string name="audit_malware_block">Protección contra malware</string>
+    <string name="audit_server_url">URL del servidor</string>
+        <string name="guide_title">Guía de Uso</string>
+        <string name="tip_cert_title">Verificación de Certificados</string>
+        <string name="tip_cert_text">
+        Si el certificado del servidor DNS cambia inesperadamente o recibes una alerta de seguridad,
+        es una buena práctica reiniciar la VPN. Esto fuerza una nueva conexión y
+        re-verificación del certificado. Pulsa el botón de encendido/apagado dos veces para reiniciar.
+    </string>
+        <string name="tip_restart_title">Aplicar Cambios de Configuración</string>
+        <string name="tip_restart_text">
+        Después de cambiar servidores DNS, la URL del servidor DoH, o cualquier otra configuración importante,
+        es recomendable desconectar y volver a conectar la VPN. Esto asegura que la nueva
+        configuración se aplique correctamente. Desactiva y activa la VPN usando el botón principal.
+    </string>
+
+        <string name="tip_choose_dns_title">Cloudflare vs Google DNS</string>
+        <string name="tip_choose_dns_text">
+        Ambos son excelentes opciones de DNS con soporte para DoH, fiabilidad y velocidad.\n\n
+        Cloudflare (1.1.1.1) es a menudo preferido por su fuerte enfoque en la privacidad y su política
+        de no registrar direcciones IP de consultas. Ofrecen también opciones de filtrado
+        (malware/adultos) en IPs alternativas.\n\n
+        Google (8.8.8.8) es también muy rápido y fiable, con una infraestructura global masiva.
+        Algunas personas prefieren Cloudflare por razones de privacidad, aunque Google tiene
+        políticas específicas para su servicio DNS.\n\n
+        La mejor elección puede depender de tus prioridades (privacidad vs. posible velocidad
+        en tu ubicación específica) o simplemente una preferencia personal.
+    </string>
+
+
+    <!-- Descripciones para los elementos de auditoría -->
+    <string name="desc_dns_protocol">Verificando si el protocolo usado es seguro</string>
+    <string name="desc_cert_pinning">Verifica si se está validando el certificado del servidor</string>
+    <string name="desc_dns_leak">Previene fugas de consultas DNS fuera del túnel seguro</string>
+    <string name="desc_malware_block">Bloqueo de dominios maliciosos conocidos</string>
+    <string name="desc_server_url">Verifica si la URL del servidor utiliza HTTPS</string>
+    <string name="dns_leak_protection_title">Protección contra fugas DNS</string>
+    <string name="dns_leak_protection_summary">Previene fugas de consultas DNS fuera del túnel seguro</string>
+    <string name="restart_required">Reinicio necesario</string>
+    <string name="restart_now">Reiniciar ahora</string>
+    <string name="later">Más tarde</string>
+    <string name="dns_leak_enabled_message">Has activado la protección contra fugas DNS. Se recomienda reiniciar el servicio VPN para aplicar los cambios.</string>
+    <string name="dns_leak_disabled_message">Has desactivado la protección contra fugas DNS. Se recomienda reiniciar el servicio VPN para aplicar los cambios.</string>
+    <!-- Estados de auditoría -->
+    <string name="status_pass">Aprobado</string>
+    <string name="status_warning">Advertencia</string>
+    <string name="status_fail">Error</string>
+
+    <!-- Mensajes detallados de estados -->
+    <string name="detail_doh_dot">Protocolo actual: %1$s</string>
+    <string name="detail_pinning_on">Activado</string>
+    <string name="detail_pinning_off">Desactivado - Se recomienda activar</string>
+    <string name="detail_dnsleak_on">Activado</string>
+    <string name="detail_dnsleak_off">Desactivado - Vulnerabilidad de seguridad</string>
+    <string name="detail_malware_on">Activado</string>
+    <string name="detail_malware_off">Desactivado - Se recomienda activar</string>
+    <string name="detail_server_url">URL actual: %1$s</string>
+    <!-- Información de la aplicación -->_desription
+    <string name="about_description">
+    "DNSVPN es una aplicación de privacidad y seguridad que utiliza DNS over HTTPS (DoH) para cifrar las consultas DNS y proteger la navegación del usuario frente a rastreos, censura y ataques de intermediarios.\n\nDiseñada para ser ligera, eficiente y fácil de usar, DNSVPN garantiza una experiencia segura sin comprometer el rendimiento.\n\nIdeal para quienes valoran la confidencialidad en redes públicas o no confiables."
+</string>
+
+    <string name="about_version">Versión</string>
+    <string name="about_developer">Desarrollador</string>
+    <string name="about_website">Sitio web</string>
+    <string name="about_license">Licencia</string>
+    <string name="vpn_permission_denied">Permiso de VPN denegado</string>
+    <string name="cert_status_warning">Certificado peligroso ⚠️</string>
+    <string name="save_certificate">Guardar Certificado (Certificate Pinning)</string>
+    <string name="certificate_verification">Verificación de Certificados</string>
+    <string name="status_not_verified">Estado: No verificado</string>
+    <string name="not_verified">No verificado</string>
+    <string name="dns_config_title">Configuración de DNS</string>
+    <string name="primary_dns_label">DNS Primario</string>
+    <string name="secondary_dns_label">DNS Secundario</string>
+    <string name="dns_change_notice">Los cambios se aplicarán al reiniciar la VPN</string>
+    <string name="save_button">Guardar</string>
+    <string name="github_profile">By Skilkry</string>
+    <string name="cancel_button">Cancelar</string>
+        <string name="dns_settings">Ajustes de DNS</string>
+        <string name="primary_dns_icon">Ícono DNS Primario</string>
+        <string name="secondary_dns_icon">Ícono DNS Secundario</string>
+        <string name="dns_providers">Proveedores Recomendados</string>
+        <string name="cloudflare">Cloudflare</string>
+        <string name="google">Google</string>
+        <string name="custom">Personalizado</string>
+        <string name="dns_info_title">¿Qué es DNS?</string>
+        <string name="dns_info_text">El DNS (Sistema de Nombres de Dominio) traduce los nombres de sitios web en direcciones IP para que tu dispositivo pueda conectarse a ellos. Utilizar un DNS seguro y rápido puede mejorar tu experiencia de navegación y aumentar tu privacidad.</string>
+    <string name="verify_certificate">Verificar Certificado</string>
+    <string name="configure_server">Configurar Servidor</string>
+</resources>

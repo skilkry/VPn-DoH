@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <path
+        android:name="circle_path"
+        android:pathData="M50,50 m-30,0 a30,30 0 1,0 60,0 a30,30 0 1,0 -60,0"
+        android:strokeWidth="8"
+        android:strokeColor="#CCCCCC"
+        android:strokeLineCap="round" />
+
+    <path
+        android:name="power_line"
+        android:pathData="M50,20 L50,50"
+        android:strokeWidth="8"
+        android:strokeColor="#CCCCCC"
+        android:strokeLineCap="round" />
+
+    <group android:name="button_color">
+        <path
+            android:pathData="M0,0 L100,100"
+            android:strokeWidth="0"
+            android:strokeColor="#00000000" />
+    </group>
+</vector>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Círculo base para estado ON -->
+    <path
+        android:fillColor="#23D9B8"
+        android:pathData="M100,10 a90,90 0 1,0 0,180 a90,90 0 1,0 0,-180" />
+
+    <!-- Resplandor exterior activo -->
+    <path
+        android:strokeColor="#4DFFD9"
+        android:strokeWidth="8"
+        android:strokeAlpha="0.3"
+        android:fillColor="#00000000"
+        android:pathData="M100,6 a94,94 0 1,0 0,188 a94,94 0 1,0 0,-188" />
+
+    <!-- Efectos de iluminación intensificados -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.4"
+        android:fillColor="#00000000"
+        android:pathData="M100,10 a90,90 0 1,0 0,180 a90,90 0 1,0 0,-180" />
+
+    <!-- Anillo interior brillante -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.3"
+        android:fillColor="#00000000"
+        android:pathData="M100,25 a75,75 0 1,0 0,150 a75,75 0 1,0 0,-150" />
+
+    <!-- Símbolo de encendido estilo moderno - parte 1: círculo completo -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="12"
+        android:strokeAlpha="0.9"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M100,100 m0,-35 a35,35 0 1,1 0,70 a35,35 0 1,1 0,-70" />
+
+    <!-- Símbolo de encendido estilo moderno - parte 2: línea vertical -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="12"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.9"
+        android:fillColor="#00000000"
+        android:pathData="M100,65 L100,85" />
+
+    <!-- Efecto de brillo interior simplificado -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.15"
+        android:pathData="M70,50 a60,60 0 0,1 60,0 a50,100 0 0,0 -60,0" />
+</vector>

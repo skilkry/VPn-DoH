@@ -1,0 +1,162 @@
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Conexión DNS"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:key="USE_CUSTOM_DNS"
+            android:title="Usar DNS personalizados"
+            android:summary="Anular bloqueo y usar servidores DNS especificados"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="DNS_SETTINGS"
+            android:title="Configurar servidores DNS"
+            android:summary="Elegir servidores DNS primario y secundario"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.DnsSettingsActivity" />
+        </Preference>
+
+        <EditTextPreference
+            android:key="SERVER_URL"
+            android:title="URL del servidor DoH"
+            android:summary="Ejemplo: https://cloudflare-dns.com"
+            android:dialogTitle="Introduce la URL del servidor"
+            android:defaultValue="https://cloudflare-dns.com"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Seguridad"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="VERIFY_CERTIFICATE"
+            android:title="Verificar certificado SSL"
+            android:summary="Validar el certificado del servidor actual"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.CertificateVerificationActivity"/>
+        </Preference>
+        <SwitchPreference
+            android:key="CERTIFICATE_PINNING"
+            android:title="Certificate pinning"
+            android:summary="Asegura que el servidor usa el certificado esperado"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:key="DNS_LEAK_PROTECTION"
+            android:title="Protección contra fugas DNS"
+            android:summary="Previene fugas de consultas DNS fuera del túnel seguro"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="SECURITY_AUDIT"
+            android:title="Auditoría de seguridad"
+            android:summary="Comprobar la configuración de seguridad actual"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.SecurityAuditActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Preferencias de la app"
+        app:iconSpaceReserved="false">
+        <SwitchPreference
+            android:key="AUTO_START"
+            android:title="Iniciar al encender el dispositivo"
+            android:summary="Ejecutar automáticamente el VPN al iniciar Android"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:key="NOTIFICATION_ENABLED"
+            android:title="Mostrar notificación"
+            android:summary="Muestra una notificación cuando VPN está activo"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Filtrado y bloqueo"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:key="AD_BLOCKER"
+            android:title="Bloqueo de anuncios"
+            android:summary="Bloquear dominios de publicidad conocidos"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:key="MALWARE_BLOCKER"
+            android:title="Protección contra malware"
+            android:summary="Bloquear dominios maliciosos conocidos"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Monitoreo y estadísticas"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="DNS_LOGS"
+            android:title="Registros DNS"
+            android:summary="Ver consultas DNS recientes"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.DnsLogsActivity"/>
+        </Preference>
+
+        <SwitchPreference
+            android:key="ENABLE_STATISTICS"
+            android:title="Recopilar estadísticas"
+            android:summary="Guarda estadísticas de uso para análisis"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="VIEW_STATISTICS"
+            android:title="Ver estadísticas"
+            android:summary="Consultas bloqueadas, dominios más visitados, etc."
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.StatisticsActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Configuración avanzada"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:key="CUSTOM_PORT"
+            android:title="Puerto personalizado"
+            android:summary="Utilizar un puerto personalizado para conexiones DNS"
+            android:inputType="number"
+            android:defaultValue="443"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:key="BYPASS_CAPTIVE_PORTAL"
+            android:title="Omitir portal cautivo"
+            android:summary="Permite la conexión a portales cautivos en redes Wi-Fi"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="IMPORT_EXPORT"
+            android:title="Importar/Exportar configuración"
+            android:summary="Guarda o carga tu configuración"
+            app:iconSpaceReserved="false">
+            <intent android:targetPackage="com.ventaone.dnsvpn"
+                android:targetClass="com.ventaone.dnsvpn.ImportExportActivity"/>
+        </Preference>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

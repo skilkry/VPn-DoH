@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- State when power is OFF -->
+    <item android:id="@+id/off"
+        android:drawable="@drawable/power_off"
+        android:state_checked="false" />
+
+    <!-- State when power is ON -->
+    <item android:id="@+id/on"
+        android:drawable="@drawable/power_on"
+        android:state_checked="true" />
+
+    <!-- Animation from OFF to ON -->
+    <transition android:fromId="@+id/off"
+        android:toId="@+id/on">
+        <animated-vector android:drawable="@drawable/power_to_on">
+            <target
+                android:name="circle_path"
+                android:animation="@animator/circle_path_anim" />
+            <target
+                android:name="power_line"
+                android:animation="@animator/power_line_anim" />
+            <target
+                android:name="button_color"
+                android:animation="@animator/button_color_anim" />
+        </animated-vector>
+    </transition>
+
+    <!-- Animation from ON to OFF -->
+    <transition android:fromId="@+id/on"
+        android:toId="@+id/off">
+        <animated-vector android:drawable="@drawable/power_to_off">
+            <target
+                android:name="circle_path"
+                android:animation="@animator/circle_path_reverse_anim" />
+            <target
+                android:name="power_line"
+                android:animation="@animator/power_line_reverse_anim" />
+            <target
+                android:name="button_color"
+                android:animation="@animator/button_color_reverse_anim" />
+        </animated-vector>
+    </transition>
+</animated-selector>
