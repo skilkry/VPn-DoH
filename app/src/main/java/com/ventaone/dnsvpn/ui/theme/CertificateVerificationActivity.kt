@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import okhttp3.*
 import java.io.IOException
+import java.net.URL
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
 import java.text.SimpleDateFormat
@@ -169,6 +170,8 @@ class CertificateVerificationActivity : AppCompatActivity() {
     }
 
     // Add method to pin the current certificate
+    // ... (resto de la clase CertificateVerificationActivity)
+
     private fun pinCurrentCertificate() {
         if (currentCertificate == null) {
             Toast.makeText(this, "No hay certificado para guardar. Verifique primero.", Toast.LENGTH_SHORT).show()
@@ -176,24 +179,34 @@ class CertificateVerificationActivity : AppCompatActivity() {
         }
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val serverUrl = preferences.getString("SERVER_URL", "cloudflare-dns.com") ?: "cloudflare-dns.com"
+        // OBTENER LA URL COMPLETA
+        val fullServerUrl = preferences.getString("DOH_SERVER_URL", "https://cloudflare-dns.com/dns-query") ?: "https://cloudflare-dns.com/dns-query"
 
-        // Extract hostname
+        // Extraer hostname de la URL completa
         val hostname = try {
-            val url = serverUrl.replace("https://", "").replace("http://", "")
-            url.split("/")[0] // Get just the domain part
+            URL(fullServerUrl).host
         } catch (e: Exception) {
-            Log.e(TAG, "Error extracting hostname from $serverUrl", e)
-            serverUrl
+            Log.e(TAG, "Error extrayendo hostname de $fullServerUrl", e)
+            // Plan B si la URL no es válida
+            fullServerUrl.replace("https://", "").split("/")[0]
         }
 
-        // Save the certificate pin
+        // Guardar el pin del certificado
         CertificateManager.saveCertificatePin(currentCertificate!!, hostname, preferences)
 
-        // Notify the user
-        Toast.makeText(this, "Certificado guardado para $hostname", Toast.LENGTH_SHORT).show()
+        // PASO 3: Limpiar el estado de error
+        DnsVpnService.isCertificatePinningFailed = false
 
-        // Update the pin button's state or text if needed
-        pinCertButton.text = "Certificado Guardado"
+        // Notificar al usuario y actualizar UI
+        Toast.makeText(this, "Certificado guardado para $hostname. Error solucionado.", Toast.LENGTH_LONG).show()
+
+        // Simular una actualización de estado para que la MainActivity reaccione si está abierta
+        // (Esto es opcional pero mejora la experiencia)
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(mainActivityIntent)
+
+        finish() // Cerrar esta actividad
     }
+
 }

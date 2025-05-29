@@ -1,143 +1,249 @@
 package com.ventaone.dnsvpn
 
 import android.util.Log
+import com.ventaone.dnsvpn.network.IP4Header
+import com.ventaone.dnsvpn.network.PacketParser
+import com.ventaone.dnsvpn.network.Protocol
+import com.ventaone.dnsvpn.network.UDPHeader
+import java.io.IOException
+import java.net.InetAddress
 import java.nio.ByteBuffer
-import java.util.*
+import java.nio.charset.StandardCharsets
 
-/**
- * Clase para construir y analizar paquetes DNS.
- * Utilizada para la protección contra fugas DNS y el manejo de consultas DNS.
- */
-class DNSPacketBuilder {
-    companion object {
-        private const val TAG = "DNSPacketBuilder"
+object DNSPacketBuilder {
+    private const val TAG = "DNSPacketBuilder"
+
+    fun buildDnsErrorResponse(queryPacket: ByteBuffer): ByteBuffer {
+        queryPacket.position(0)
+        val originalIpHeader = PacketParser.parseIP4Header(queryPacket)
+        val originalUdpHeader = PacketParser.parseUDPHeader(queryPacket)
+        val queryDnsData = ByteArray(queryPacket.remaining())
+        queryPacket.get(queryDnsData)
+        val responseDnsBuffer = buildDnsResponsePayload(ByteBuffer.wrap(queryDnsData), emptyList(), 2)
+        return packageUdpAndIp(responseDnsBuffer, originalIpHeader, originalUdpHeader)
     }
 
-    private var defaultDnsServer = "1.1.1.1"
-    private val blockedDnsServers = mutableSetOf<String>()
-
-    init {
-        // Inicializar servidores DNS públicos comunes para bloquear
-        blockedDnsServers.addAll(
-            listOf(
-                "8.8.8.8", "8.8.4.4",      // Google
-                "9.9.9.9", "149.112.112.112", // Quad9
-                "208.67.222.222", "208.67.220.220" // OpenDNS
-                // Podemos añadir más servidores DNS públicos según sea necesario
-            )
-        )
+    fun buildDnsResponse(queryPacket: ByteBuffer, ips: List<String>): ByteBuffer {
+        queryPacket.position(0)
+        val originalIpHeader = PacketParser.parseIP4Header(queryPacket)
+        val originalUdpHeader = PacketParser.parseUDPHeader(queryPacket)
+        val queryDnsData = ByteArray(queryPacket.remaining())
+        queryPacket.get(queryDnsData)
+        val responseDnsBuffer = buildDnsResponsePayload(ByteBuffer.wrap(queryDnsData), ips, 0)
+        return packageUdpAndIp(responseDnsBuffer, originalIpHeader, originalUdpHeader)
     }
 
-    /**
-     * Establece el servidor DNS predeterminado
-     */
-    fun setDefaultDnsServer(server: String) {
-        this.defaultDnsServer = server
-        Log.d(TAG, "Servidor DNS predeterminado configurado: $server")
-    }
+    private fun buildDnsResponsePayload(queryPayload: ByteBuffer, ips: List<String>, rcode: Int): ByteBuffer {
+        val responseBuffer = ByteBuffer.allocate(4096)
+        val originalId = queryPayload.getShort(0)
+        val flags = (0x8180 or rcode).toShort()
 
-    /**
-     * Obtiene la lista de servidores DNS bloqueados
-     */
-    fun getBlockedDnsServers(): Set<String> {
-        return blockedDnsServers
-    }
+        responseBuffer.putShort(originalId)
+        responseBuffer.putShort(flags)
+        responseBuffer.putShort(1)
+        responseBuffer.putShort(ips.size.toShort())
+        responseBuffer.putShort(0)
+        responseBuffer.putShort(0)
 
-    /**
-     * Añade un servidor DNS a la lista de bloqueados
-     */
-    fun addBlockedDnsServer(server: String) {
-        blockedDnsServers.add(server)
-        Log.d(TAG, "Añadido servidor DNS a la lista de bloqueados: $server")
-    }
-
-    /**
-     * Construye un paquete de consulta DNS
-     */
-    fun buildDnsQuery(domain: String, queryType: Short = 1): ByteBuffer {
-        try {
-            val buffer = ByteBuffer.allocate(512) // Tamaño estándar para consultas DNS
-
-            // Header DNS
-            val id = Random().nextInt(Short.MAX_VALUE.toInt()).toShort()
-            buffer.putShort(id) // Transaction ID
-            buffer.putShort(0x0100) // Flags: consulta estándar recursiva
-            buffer.putShort(1) // QDCOUNT: 1 pregunta
-            buffer.putShort(0) // ANCOUNT: 0 respuestas
-            buffer.putShort(0) // NSCOUNT: 0 registros NS
-            buffer.putShort(0) // ARCOUNT: 0 registros adicionales
-
-            // Consulta
-            val labels = domain.split(".")
-            for (label in labels) {
-                buffer.put(label.length.toByte())
-                label.forEach { buffer.put(it.code.toByte()) }
+        val questionSectionOriginalOffset = 12
+        queryPayload.position(questionSectionOriginalOffset)
+        val questionStartPosition = queryPayload.position()
+        var qnameEndPosition = -1
+        while (queryPayload.hasRemaining()) {
+            val len = queryPayload.get().toInt() and 0xFF
+            if (len == 0) {
+                qnameEndPosition = queryPayload.position()
+                break
             }
-            buffer.put(0) // Terminador de nombre de dominio
+            if (queryPayload.remaining() < len) {
+                Log.e(TAG, "Paquete de consulta malformado, QNAME incompleto.")
+                responseBuffer.flip(); return responseBuffer
+            }
+            queryPayload.position(queryPayload.position() + len)
+        }
+        if (qnameEndPosition == -1 || queryPayload.remaining() < 4) {
+            Log.e(TAG, "Paquete de consulta malformado, sin QTYPE/QCLASS.")
+            responseBuffer.flip(); return responseBuffer
+        }
+        val questionEndPosition = qnameEndPosition + 4
+        val questionLength = questionEndPosition - questionStartPosition
+        if (responseBuffer.remaining() < questionLength) {
+            Log.e(TAG, "BufferOverflow, la pregunta es demasiado grande para el buffer.")
+            responseBuffer.flip(); return responseBuffer
+        }
+        val questionBytes = ByteArray(questionLength)
+        queryPayload.position(questionStartPosition)
+        queryPayload.get(questionBytes)
+        responseBuffer.put(questionBytes)
 
-            buffer.putShort(queryType) // QTYPE (1 = A record)
-            buffer.putShort(1) // QCLASS (1 = IN)
+        if (rcode == 0) {
+            ips.forEach { ip ->
+                if (responseBuffer.remaining() < 16) {
+                    Log.e(TAG, "BufferOverflow al intentar añadir la IP: $ip. No hay espacio.")
+                    return@forEach
+                }
+                responseBuffer.put(0xC0.toByte())
+                responseBuffer.put(questionSectionOriginalOffset.toByte())
+                responseBuffer.putShort(1)
+                responseBuffer.putShort(1)
+                responseBuffer.putInt(60)
+                responseBuffer.putShort(4)
+                ip.split('.').forEach { part ->
+                    responseBuffer.put((part.toInt() and 0xFF).toByte())
+                }
+            }
+        }
 
-            buffer.flip()
-            return buffer
+        responseBuffer.flip()
+        return responseBuffer
+    }
+
+    private fun packageUdpAndIp(dnsPayload: ByteBuffer, originalIpHeader: IP4Header, originalUdpHeader: UDPHeader): ByteBuffer {
+        val udpPayloadSize = 8 + dnsPayload.limit()
+        val udpBuffer = ByteBuffer.allocate(udpPayloadSize)
+        udpBuffer.putShort(originalUdpHeader.destinationPort.toShort())
+        udpBuffer.putShort(originalUdpHeader.sourcePort.toShort())
+        udpBuffer.putShort(udpPayloadSize.toShort())
+        udpBuffer.putShort(0)
+        udpBuffer.put(dnsPayload)
+
+        val ipPayloadSize = 20 + udpBuffer.limit()
+        val ipBuffer = ByteBuffer.allocate(ipPayloadSize)
+        ipBuffer.put(0x45.toByte())
+        ipBuffer.put(0)
+        ipBuffer.putShort(ipPayloadSize.toShort())
+        ipBuffer.putShort(0)
+        ipBuffer.putShort(0x4000.toShort())
+        ipBuffer.put(64.toByte())
+        ipBuffer.put(Protocol.UDP.toByte())
+        ipBuffer.putShort(0)
+        ipBuffer.put(originalIpHeader.destinationAddress.address)
+        ipBuffer.put(originalIpHeader.sourceAddress.address)
+        ipBuffer.putShort(10, calculateChecksum(ipBuffer, 0, 20))
+        ipBuffer.put(udpBuffer.array())
+        ipBuffer.flip()
+        return ipBuffer
+    }
+
+    fun extractDomainAndIdFromQuery(queryPacket: ByteBuffer): Pair<String, Short>? {
+        try {
+            queryPacket.position(0)
+            PacketParser.parseIP4Header(queryPacket)
+            PacketParser.parseUDPHeader(queryPacket)
+            val transactionId = queryPacket.getShort()
+            queryPacket.position(queryPacket.position() + 10)
+            return Pair(extractDomainName(queryPacket), transactionId)
         } catch (e: Exception) {
-            Log.e(TAG, "Error al construir paquete DNS", e)
-            throw e
+            // Este catch ahora atrapará los errores de paquetes malformados desde extractDomainName
+            Log.w(TAG, "Paquete DNS ignorado (no se pudo extraer el dominio): ${e.message}")
+            return null
         }
     }
 
-    /**
-     * Analiza una respuesta DNS para extraer las IPs
-     */
-    fun parseDnsResponse(response: ByteBuffer): List<String> {
+    // --- INICIO DE LA CORRECCIÓN ---
+    // Se ha hecho esta función más segura para que falle ante paquetes malformados.
+    private fun extractDomainName(buffer: ByteBuffer): String {
+        val domain = StringBuilder()
+        while (true) {
+            if (!buffer.hasRemaining()) {
+                throw IOException("Paquete malformado: se alcanzó el final del buffer buscando la longitud de la etiqueta.")
+            }
+            val len = buffer.get().toInt() and 0xFF
+            if (len == 0) {
+                break // Fin del QNAME
+            }
+            // Comprobación de seguridad clave:
+            if (buffer.remaining() < len) {
+                throw IOException("QNAME malformado: longitud declarada ($len) mayor que los bytes restantes (${buffer.remaining()})")
+            }
+            if (domain.isNotEmpty()) {
+                domain.append('.')
+            }
+            val domainPartBytes = ByteArray(len)
+            buffer.get(domainPartBytes)
+            domain.append(String(domainPartBytes, StandardCharsets.UTF_8))
+        }
+        return domain.toString()
+    }
+    // --- FIN DE LA CORRECCIÓN ---
+
+    fun buildDnsQueryForDoH(domain: String): ByteArray {
+        val buffer = ByteBuffer.allocate(512)
+        buffer.putShort(kotlin.random.Random.nextInt(1, 65535).toShort())
+        buffer.putShort(0x0100.toShort())
+        buffer.putShort(1)
+        buffer.putShort(0)
+        buffer.putShort(0)
+        buffer.putShort(0)
+        domain.split('.').forEach { part ->
+            buffer.put(part.length.toByte())
+            buffer.put(part.toByteArray(Charsets.US_ASCII))
+        }
+        buffer.put(0.toByte())
+        buffer.putShort(1)
+        buffer.putShort(1)
+        buffer.flip()
+        val queryData = ByteArray(buffer.limit())
+        buffer.get(queryData)
+        return queryData
+    }
+
+    fun parseDnsResponseFromDoH(data: ByteArray): List<String> {
+        val buffer = ByteBuffer.wrap(data)
         val ips = mutableListOf<String>()
         try {
-            // Saltar header DNS (12 bytes)
-            response.position(12)
+            buffer.position(6)
+            val answerCount = buffer.getShort().toInt()
+            buffer.position(12)
+            var qnameEnd = -1
+            while(buffer.hasRemaining()) {
+                val len = buffer.get().toInt() and 0xff
+                if (len == 0) {
+                    qnameEnd = buffer.position()
+                    break
+                }
+                if (buffer.remaining() < len) { break }
+                buffer.position(buffer.position() + len)
+            }
+            if(qnameEnd == -1) return emptyList()
 
-            // Saltar la consulta original
-            skipDomainName(response)
-            response.position(response.position() + 4) // Saltar QTYPE y QCLASS
-
-            // Procesar respuestas
-            val header = response.duplicate()
-            header.position(0)
-            val answerCount = header.getShort(6).toInt() and 0xFFFF
+            buffer.position(qnameEnd + 4)
 
             for (i in 0 until answerCount) {
-                skipDomainName(response)
-                val type = response.getShort() // QTYPE
-                response.position(response.position() + 6) // Saltar CLASS, TTL
-                val dataLength = response.getShort().toInt() and 0xFFFF
-
-                if (type.toInt() == 1) { // A record
-                    val b1 = response.get().toInt() and 0xFF
-                    val b2 = response.get().toInt() and 0xFF
-                    val b3 = response.get().toInt() and 0xFF
-                    val b4 = response.get().toInt() and 0xFF
-                    ips.add("$b1.$b2.$b3.$b4")
+                if (buffer.remaining() < 12) break
+                val firstByte = buffer.get().toInt() and 0xFF
+                if ((firstByte and 0xC0) == 0xC0) {
+                    buffer.get()
+                }
+                val type = buffer.getShort().toInt()
+                buffer.getShort()
+                buffer.getInt()
+                val dataLength = buffer.getShort().toInt()
+                if (type == 1 && dataLength == 4) {
+                    val ipBytes = ByteArray(4)
+                    buffer.get(ipBytes)
+                    ips.add(InetAddress.getByAddress(ipBytes).hostAddress)
                 } else {
-                    response.position(response.position() + dataLength)
+                    buffer.position(buffer.position() + dataLength)
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error al parsear respuesta DNS", e)
+            Log.e(TAG, "Error al parsear la respuesta DoH", e)
         }
         return ips
     }
 
-    /**
-     * Salta un nombre de dominio codificado en el paquete DNS
-     */
-    private fun skipDomainName(buffer: ByteBuffer) {
-        while (true) {
-            val len = buffer.get().toInt() and 0xFF
-            if (len == 0) break // Fin del nombre
-            if ((len and 0xC0) == 0xC0) { // Compresión de dominio
-                buffer.position(buffer.position() + 1) // Saltar el segundo byte de la referencia
-                break
-            }
-            buffer.position(buffer.position() + len) // Saltar el label
+    private fun calculateChecksum(buffer: ByteBuffer, offset: Int, length: Int): Short {
+        var sum = 0
+        val oldPos = buffer.position()
+        buffer.position(offset)
+        for (i in 0 until length / 2) {
+            sum += buffer.getShort().toInt() and 0xFFFF
         }
+        buffer.position(oldPos)
+        while (sum shr 16 > 0) {
+            sum = (sum and 0xFFFF) + (sum shr 16)
+        }
+        return sum.inv().toShort()
     }
 }
