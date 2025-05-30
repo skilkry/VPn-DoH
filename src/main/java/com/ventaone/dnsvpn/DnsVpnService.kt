@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.ventaone.dnsvpn.network.PacketParser
 import com.ventaone.dnsvpn.network.Protocol
+import com.ventaone.dnsvpn.network.UDPHeader // Asegúrate de que UDPHeader esté importado si PacketParser lo devuelve directamente
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -82,7 +83,7 @@ class DnsVpnService : VpnService(), Runnable {
                 thread = Thread(this, "DnsVpnThread")
                 thread?.start()
                 isServiceRunning = true
-                showVpnNotification("VPN Activa (Solo DNS)", "El servicio DNS está protegiendo tus consultas.") // Título modificado
+                showVpnNotification("VPN Activa (Solo DNS)", "El servicio DNS está protegiendo tus consultas.")
             } else {
                 Log.e(TAG, "[DEBUG] La interfaz VPN no se pudo establecer. Deteniendo servicio.")
                 stopSelf()
@@ -95,8 +96,6 @@ class DnsVpnService : VpnService(), Runnable {
 
     override fun run() {
         Log.d(TAG, "[DEBUG] RUN: Hilo de la VPN iniciado. Entrando en bucle de lectura.")
-        // Es crucial que vpnInterface no sea null aquí.
-        // La lógica en onStartCommand debería asegurar esto o detener el servicio.
         val currentVpnInterface = vpnInterface ?: run {
             Log.e(TAG, "[DEBUG] RUN: vpnInterface es null al inicio de run(). Deteniendo hilo.")
             isRunning = false
@@ -113,33 +112,54 @@ class DnsVpnService : VpnService(), Runnable {
                     Log.d(TAG, "[DEBUG] RUN: Leídos $size bytes del túnel VPN.")
                     packetBuffer.limit(size)
 
+                    // Crear una copia del buffer para reenvío, ya que el parseo consumirá el original
+                    val packetToForwardCopy = ByteBuffer.allocate(size)
+                    packetToForwardCopy.put(packetBuffer.array(), 0, size)
+                    packetToForwardCopy.flip()
+                    packetBuffer.position(0) // Resetear posición del buffer original para parseo
+
+                    var handledByDnsLogic = false
                     try {
-                        val currentPacket = packetBuffer.duplicate()
-                        val ipHeader = PacketParser.parseIP4Header(currentPacket)
-                        Log.d(TAG, "[DEBUG] RUN: Paquete IPV4 parseado. Protocolo: ${ipHeader.protocol}, Origen: ${ipHeader.sourceAddress.hostAddress}, Destino: ${ipHeader.destinationAddress.hostAddress}")
+                        val ipHeader = PacketParser.parseIP4Header(packetBuffer) // Consume packetBuffer
+                        Log.d(TAG, "[DEBUG] RUN: Paquete IPV4 parseado. Proto: ${ipHeader.protocol}, Origen: ${ipHeader.sourceAddress.hostAddress}, Dst: ${ipHeader.destinationAddress.hostAddress}")
 
                         if (ipHeader.protocol == Protocol.UDP) {
-                            val udpPacketForDns = packetBuffer.duplicate()
-                            val udpHeader = PacketParser.parseUDPHeader(udpPacketForDns)
-                            Log.d(TAG, "[DEBUG] RUN: Paquete UDP parseado. Puerto Origen: ${udpHeader.sourcePort}, Puerto Destino: ${udpHeader.destinationPort}")
+                            val udpHeader = PacketParser.parseUDPHeader(packetBuffer) // Consume más de packetBuffer
+                            Log.d(TAG, "[DEBUG] RUN: Paquete UDP parseado. SrcPort: ${udpHeader.sourcePort}, DstPort: ${udpHeader.destinationPort}")
 
-                            // Solo procesamos paquetes DNS dirigidos a nuestro servidor DNS virtual
                             if (udpHeader.destinationPort == 53 && ipHeader.destinationAddress.hostAddress == "10.0.0.1") {
-                                Log.d(TAG, "[DEBUG] RUN: Paquete DNS para nuestro resolvedor detectado! Lanzando hilo.")
+                                Log.d(TAG, "[DEBUG] RUN: Paquete DNS para nuestro resolvedor detectado! Procesando.")
+                                // Para handleDnsQuery, pasamos la copia que está intacta desde el inicio del IP.
+                                val originalIpPacketForDnsHandler = packetToForwardCopy.duplicate()
                                 thread {
-                                    handleDnsQuery(packetBuffer.duplicate(), vpnOutput)
+                                    handleDnsQuery(originalIpPacketForDnsHandler, vpnOutput)
                                 }
-                            } else {
-                                // Si no es un paquete DNS para nuestro servidor virtual, lo ignoramos.
-                                // El sistema operativo debería enrutarlo por la red física si no hay ruta global en la VPN.
-                                Log.d(TAG, "[DEBUG] RUN: Paquete UDP (Destino: ${ipHeader.destinationAddress.hostAddress}:${udpHeader.destinationPort}) ignorado por el manejador DNS.")
+                                handledByDnsLogic = true
                             }
-                        } else {
-                            // Ignoramos paquetes no UDP (ej. TCP). El sistema debería enrutarlos por la red física.
-                            Log.d(TAG, "[DEBUG] RUN: Paquete NO UDP (Protocolo: ${ipHeader.protocol}) ignorado por el manejador DNS.")
                         }
+
+                        if (!handledByDnsLogic) {
+                            // Si no fue un paquete DNS para nuestro servidor, lo escribimos a vpnOutput.
+                            // Esto permite que el sistema operativo lo enrute a través de la red física.
+                            var destPortInfo = "N/A"
+                            if (ipHeader.protocol == Protocol.UDP) {
+                                // Necesitamos parsear de nuevo desde la copia para obtener el puerto UDP si no fue DNS
+                                val tempCopyForUdpPort = packetToForwardCopy.duplicate()
+                                PacketParser.parseIP4Header(tempCopyForUdpPort) // Avanzar más allá del encabezado IP
+                                destPortInfo = PacketParser.parseUDPHeader(tempCopyForUdpPort).destinationPort.toString()
+                            }
+                            Log.d(TAG, "[DEBUG] RUN: Paquete NO DNS para nuestro resolvedor (Proto: ${ipHeader.protocol}, Dst: ${ipHeader.destinationAddress.hostAddress}:${destPortInfo}). Escribiendo a vpnOutput para forwarding.")
+                            synchronized(vpnOutput) {
+                                vpnOutput.write(packetToForwardCopy.array(), 0, packetToForwardCopy.limit())
+                            }
+                        }
+
                     } catch (e: Exception) {
-                        Log.e(TAG, "[DEBUG] RUN: Error al parsear paquete IP/UDP. Ignorando.", e)
+                        Log.e(TAG, "[DEBUG] RUN: Error al parsear/procesar paquete. Reescribiendo el paquete original para forwarding.", e)
+                        // Si hay error en el parseo, intentamos reenviar el paquete original tal cual
+                        synchronized(vpnOutput) {
+                            vpnOutput.write(packetToForwardCopy.array(), 0, packetToForwardCopy.limit())
+                        }
                     }
                 } else if (size == 0) {
                     // Continue
@@ -187,11 +207,12 @@ class DnsVpnService : VpnService(), Runnable {
         }
     }
 
-    private fun handleDnsQuery(queryPacket: ByteBuffer, vpnOutput: FileOutputStream) {
+    private fun handleDnsQuery(queryIpPacket: ByteBuffer, vpnOutput: FileOutputStream) {
+        // queryIpPacket es el paquete IP completo que contiene la consulta DNS
         Log.d(TAG, "[DEBUG] DNS_HANDLER: Iniciando manejo de consulta DNS.")
         try {
-            val queryPacketCopy = queryPacket.duplicate() // Usar una copia para no afectar el original en otros hilos
-            val (domain, _) = DNSPacketBuilder.extractDomainAndIdFromQuery(queryPacketCopy) ?: run { // queryPacketCopy se consume aquí
+            // DNSPacketBuilder.extractDomainAndIdFromQuery espera un buffer que comience en el encabezado IP
+            val (domain, _) = DNSPacketBuilder.extractDomainAndIdFromQuery(queryIpPacket.duplicate()) ?: run {
                 Log.w(TAG, "[DEBUG] DNS_HANDLER: No se pudo extraer el dominio. Abortando.")
                 return
             }
@@ -199,10 +220,8 @@ class DnsVpnService : VpnService(), Runnable {
 
             val ips = performDohQuery(domain)
 
-            // Necesitamos el queryPacket original (o una copia intacta desde el inicio del IP)
-            // para construir la respuesta completa.
-            val originalPacketForResponse = queryPacket.duplicate()
-            originalPacketForResponse.position(0) // Asegurar que está al inicio
+            val originalPacketForResponse = queryIpPacket.duplicate()
+            originalPacketForResponse.position(0)
 
             val responsePacket = if (ips.isNotEmpty()) {
                 Log.d(TAG, "[DEBUG] DNS_HANDLER: Consulta DoH exitosa para '$domain'. IPs: $ips. Construyendo respuesta.")
@@ -317,15 +336,11 @@ class DnsVpnService : VpnService(), Runnable {
         return try {
             val builder = Builder()
             builder.setSession("DnsVpn")
-            builder.addAddress("10.0.0.2", 32) // Dirección para la interfaz VPN
-            builder.addDnsServer("10.0.0.1")   // Servidor DNS que esta VPN interceptará
-
-            // --- IMPORTANTE: NO AÑADIR RUTA GLOBAL SI SOLO SE QUIERE MANEJAR DNS ---
-            // builder.addRoute("0.0.0.0", 0) // Esta línea haría que TODO el tráfico pase por la VPN.
-            // --- FIN DE LA MODIFICACIÓN IMPORTANTE ---
-
-            builder.addDisallowedApplication(packageName) // Para que la propia app VPN no use el túnel para sus peticiones DoH.
-
+            builder.addAddress("10.0.0.2", 32)
+            builder.addDnsServer("10.0.0.1")
+            builder.addRoute("10.0.0.1", 32) // Ruta específica para nuestro DNS virtual
+            // NO builder.addRoute("0.0.0.0", 0)
+            builder.addDisallowedApplication(packageName)
             Log.d(TAG, "[DEBUG] Configuración de VpnService.Builder completada. Llamando a establish()...")
             builder.establish()
         } catch (e: Exception) {
