@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <!-- Header: Configuración -->
+        <item
+            android:id="@+id/header_config"
+            android:title="CONFIGURACIÓN"
+            android:enabled="false" />
+
+        <item
+            android:id="@+id/nav_server_settings"
+            android:icon="@drawable/ic_storage_24dp"
+            android:title="@string/menu_server_settings_title" />
+        <item
+            android:id="@+id/nav_dns"
+            android:icon="@drawable/ic_dns_24dp"
+            android:title="@string/menu_dns_title" />
+        <item
+            android:id="@+id/nav_certs"
+            android:icon="@drawable/ic_security_24dp"
+            android:title="@string/menu_certificates_title" />
+
+        <!-- Header: Información -->
+        <item
+            android:id="@+id/header_info"
+            android:title="INFORMACIÓN"
+            android:enabled="false" />
+
+        <item
+            android:id="@+id/action_guide"
+            android:icon="@drawable/person_alert_24px"
+            android:title="Guía de Uso" />
+        <item
+            android:id="@+id/action_about"
+            android:icon="@drawable/info_24px"
+            android:title="Acerca de" />
+        <item
+            android:id="@+id/header_creator"
+            android:title="@string/creators_info_text"
+            android:enabled="false" />
+    </group>
+</menu>

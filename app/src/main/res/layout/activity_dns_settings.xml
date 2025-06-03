@@ -87,7 +87,7 @@
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_dns_primary"
                                 android:contentDescription="@string/primary_dns_icon"
-                                app:tint="#4DFFD9" />
+                                app:tint="@color/config_button_stroke" />
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/primaryDnsLayout"
@@ -132,7 +132,7 @@
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_dns_secondary"
                                 android:contentDescription="@string/secondary_dns_icon"
-                                app:tint="#4DFFD9" />
+                                app:tint="@color/config_button_stroke" />
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/secondaryDnsLayout"
@@ -193,7 +193,7 @@
                                     android:text="@string/cloudflare"
                                     android:textColor="#FFFFFF"
                                     app:chipBackgroundColor="#40FFFFFF"
-                                    app:chipStrokeColor="#4DFFD9"
+                                    app:chipStrokeColor="@color/config_button_stroke"
                                     app:chipStrokeWidth="1dp" />
 
                                 <com.google.android.material.chip.Chip
@@ -203,7 +203,7 @@
                                     android:text="@string/google"
                                     android:textColor="#FFFFFF"
                                     app:chipBackgroundColor="#40FFFFFF"
-                                    app:chipStrokeColor="#4DFFD9"
+                                    app:chipStrokeColor="@color/config_button_stroke"
                                     app:chipStrokeWidth="1dp" />
 
                                 <com.google.android.material.chip.Chip
@@ -213,7 +213,7 @@
                                     android:text="@string/custom"
                                     android:textColor="#FFFFFF"
                                     app:chipBackgroundColor="#40FFFFFF"
-                                    app:chipStrokeColor="#4DFFD9"
+                                    app:chipStrokeColor="@color/config_button_stroke"
                                     app:chipStrokeWidth="1dp" />
                             </com.google.android.material.chip.ChipGroup>
                         </LinearLayout>
@@ -255,7 +255,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="14sp"
                         app:cornerRadius="12dp"
-                        app:backgroundTint="#4DFFD9"
+                        app:backgroundTint="@color/config_button_stroke"
                         android:layout_marginEnd="8dp"
                         android:paddingVertical="12dp"/>
 

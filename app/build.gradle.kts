@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ventaone.dnsvpn"
-        minSdk = 21
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -92,6 +92,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.0")
     implementation(libs.androidx.media3.common.ktx)
+    implementation(libs.filament.android)
+    implementation(libs.car.ui.lib)
     // Jetpack Compose
     val composeVersion = "1.4.0"
     implementation("androidx.compose.ui:ui:$composeVersion")

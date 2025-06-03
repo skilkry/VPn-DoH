@@ -1,17 +1,55 @@
-<resources>
-    <color name="colorPrimary">#000000</color> <color name="colorSecondary">#03DAC5</color> <color name="colorSurface">#FFFFFF</color> <color name="colorOnPrimary">#0D0C0C</color> <color name="colorOnSurface">#1C1B1F</color> <color name="colorOnSurfaceVariant">#49454F</color> <color name="colorOutline">#79747E</color>
+<?xml version="1.0" encoding="utf-8"?>
+
+    <resources>
+
+    <!--  ACTIVITY MAIN COLORS -->
+        <color name="colorToolbar">#374151</color>
+        <color name="colorPrimarySurface">#374151</color>
+        <color name="power_button_off_bg">#6B7280</color>
+        <color name="power_button_icon_tint">#FFFFFF</color>
+        <color name="chip_offline_bg">#6B7280</color>
+
+        <color name="fab_icon_tint">#FFFFFF</color>
+        <color name="config_panel_bg">#374151</color>
+        <color name="transparent">#00000000</color>
+        <color name="gradient_start_color">#1F2937</color>
+        <color name="gradient_end_color">#111827</color>
+        <color name="card_surface_color">#374151</color>
+        <color name="neutral_gray_disconnected">#6B7280</color>
+        <color name="vibrant_blue_primary">#007AFF</color> <color name="accent_green_connected">#10B981</color>
+        <color name="accent_red_error">#EF4444</color>
+        <color name="text_primary_white">#FFFFFF</color>
+        <color name="text_secondary_gray">#E5E7EB</color>
+        <color name="separator_color">#374151</color>
+    <color name="your_yellow_color">#FFD700</color> <!-- ejemplo: amarillo dorado -->
+
+    <!-- END OF ACTIVITY MAIN COLORS -->
+
+    <color name="colorPrimary">#000000</color> <color name="colorSecondary">#03DAC5</color> <color name="colorSurface">#FFFFFF</color><color name="colorOnSurfaceVariant">#49454F</color> <color name="colorOutline">#79747E</color>
     <color name="color_power_off">#D32F2F</color>
     <color name="color_power_on">#388E3C</color>
     <color name="lightgray">#fff</color>
     <color name="power_button_on_color">#388E3C</color>
     <color name="power_button_off_color">#D32F2F</color>
-    <color name="colorPrimaryDark">#121212</color>
-    <color name="colorAccent">#4CAF50</color>
 
         <!-- Colores para estados del botón -->
         <color name="buttonOn">#00C2A0</color>
         <color name="buttonOff">#424242</color>
         <color name="buttonDisabled">#757575</color>
+    <color name="colorPrimaryDark">#1F1F2E</color>  <color name="colorAccent">#00BCD4</color> <color name="colorAccentLight">#4DD0E1</color> <color name="colorOnPrimary">#FFFFFF</color> <color name="colorOnSurface">#E0E0E0</color> <color name="status_green">#4CAF50</color>
+    <color name="status_red">#F44336</color>
+    <color name="status_yellow">#FFC107</color>
+    <color name="status_grey">#9E9E9E</color>
+
+
+    <color name="power_button_on_bg">@color/colorAccent</color>
+
+
+  <color name="chip_online_bg">#804CAF50</color> <color name="chip_text_color">#FFFFFF</color>
+
+    <color name="config_button_stroke">#8000BCD4</color> <color name="config_button_icon_tint">@color/colorAccentLight</color>
+    <color name="config_button_text_color">@color/colorOnPrimary</color>
+
 
         <!-- Colores para estados de conexión -->
         <color name="statusConnected">#4CAF50</color>

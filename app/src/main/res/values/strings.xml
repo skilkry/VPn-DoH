@@ -1,32 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+
+    <string name="app_name">VPN DoH</string> <string name="offline">Offline</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="connecting_status">Conectando…</string>
+    <string name="online">Online</string>
+    <string name="connected">Conectado</string>
+    <string name="error_status">Error</string>
+    <string name="connection_error_status">Error de Conexión</string>
+
+    <string name="vpn_permission_denied">Permiso de VPN denegado.</string>
+    <string name="notification_permission_denied_message">Las notificaciones están desactivadas. Algunas funciones pueden no operar correctamente.</string>
+    <string name="unknown_error">Error desconocido.</string>
+    <string name="notification_permission_title">Permiso de Notificación</string>
+    <string name="notification_permission_rationale">Necesitamos mostrar notificaciones para mantener la app VPN activa y proveer información del estado de conexión.</string>
+    <string name="request_permission_button">Solicitar Permiso</string>
+    <string name="cancel_button">Cancelar</string>
+
+    <string name="cert_status_default">Sin verificar</string>
+    <string name="cert_status_valid">Certificado Válido</string>
+    <string name="cert_status_invalid">Certificado Inválido</string>
+    <string name="cert_status_warning">Advertencia de Certificado</string>
+    <string name="cert_pinning_error_title">Error de Anclaje</string>
+    <string name="cert_pinning_error_action_required">¡Acción requerida! El certificado del servidor no es válido o no coincide con el anclado.</string>
+    <string name="certificate_now_invalid_warning">El certificado del servidor actual se ha vuelto inválido. Revisa la configuración.</string>
+
+    <string name="power_button">Botón de encendido</string> <string name="connection_status">Estado de conexión</string> <string name="cert_status_icon">Icono de estado de certificado</string> <string name="settings">Ajustes</string> <string name="dns">DNS</string>
+    <string name="certs">CERTIFICADOS</string>
+    <string name="server">SERVIDOR</string>
+
+
+
+
+
+
+
+
     <!-- Nombre de la aplicación -->
-    <string name="app_name">VPN DoH</string>
+
     <string name="my_app">VPN DoH</string>
 
     <!-- Botones principales -->
-    <string name="power_button">Botón de encendido</string>
+
     <string name="power_button_background">Fondo del botón de encendido</string>
-    <string name="settings">Configuración</string>
+
 
     <!-- Botones de configuración -->
-    <string name="dns">DNS</string>
-    <string name="certs">Certificados</string>
-    <string name="server">Servidor</string>
 
+        <string name="menu_user_guide">Guía de Uso</string>
+
+        <string name="title_activity_user_guide">Guía de Uso</string>
+        <string name="title_activity_about">Acerca de la Aplicación</string>
+
+        <string name="user_guide_heading_1">Bienvenido a [Tu Nombre de App]</string>
+        <string name="user_guide_content_1">Esta aplicación te permite cambiar tus servidores DNS para usar DNS sobre HTTPS (DoH), mejorando tu privacidad y seguridad al navegar.\n\nPrincipales Funciones:\n- Conexión/Desconexión sencilla con un toque.\n- Selección de servidor DoH personalizado.\n- Verificación de certificados del servidor DoH.\n- Indicador de estado de conexión y certificado.</string>
+        <string name="user_guide_heading_2">¿Cómo Funciona?</string>
+        <string name="user_guide_content_2">Cuando activas la VPN:\n1. Las consultas DNS de tu dispositivo son interceptadas.\n2. Se envían de forma segura a través de HTTPS al servidor DoH que hayas configurado (por defecto, Cloudflare).\n3. Las respuestas se devuelven a tu dispositivo.\n\nImportante: Esta app, por defecto, solo maneja el tráfico DNS. El resto de tu tráfico de internet (navegación, apps) utiliza tu conexión de red habitual.</string>
+        <string name="user_guide_heading_3">Configuración</string>
+        <string name="user_guide_content_3">Puedes personalizar tu experiencia:\n- **DNS:** Cambia los servidores DNS primario y secundario que se usarán si la opción "Usar DNS personalizados" está activada en las preferencias generales (actualmente esta opción no afecta directamente al DoH pero podría usarse para futuras funcionalidades).\n- **Servidor DoH:** En Ajustes (icono de engranaje en la pantalla principal -> opción Servidor), puedes especificar la URL completa de tu servidor DoH preferido.\n- **Certificados:** Verifica y ancla (pin) el certificado del servidor DoH para mayor seguridad desde la pantalla de "Verificar Certificados".</string>
+        <string name="user_guide_troubleshooting">Solución de Problemas</string>
+        <string name="user_guide_troubleshooting_content">- Si no tienes internet: Asegúrate de que tu conexión Wi-Fi o de datos móviles funciona. Verifica que el servidor DoH es accesible. Revisa el estado del certificado.\n- Error de certificado: Ve a la pantalla de certificados y verifica/guarda el certificado del servidor actual.</string>
+
+        <string name="about_app_version">Versión %1$s</string> <string name="about_developed_by">Desarrollado con ♥</string>
+       <string name="about_privacy_policy_button">Política de Privacidad</string>
+        <string name="privacy_policy_url">https://www.example.com/privacy</string>
     <!-- Estados de conexión -->
-    <string name="connected">Conectado</string>
-    <string name="connecting">Conectando</string>
-    <string name="disconnected">Desconectado</string>
-    <string name="connection_status">Estado de conexión</string>
-    <string name="online">ONLINE</string>
-    <string name="offline">OFFLINE</string>
+
 
     <!-- Estados de certificados -->
-    <string name="cert_status_icon">Estado del certificado</string>
-    <string name="cert_status_default">Sin certificado</string>
-    <string name="cert_status_valid">Certificado válido</string>
-    <string name="cert_status_invalid">Certificado inválido</string>
+
     <string name="cert_status_expired">Certificado expirado</string>
 
     <!-- Información de conexión -->
@@ -142,6 +186,27 @@
     <string name="status_warning">Advertencia</string>
     <string name="status_fail">Error</string>
 
+
+
+
+    <string name="navigation_drawer_open">Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
+
+    <string name="configuracion_header">CONFIGURACIÓN \n\n\t\t\tVentaOne</string>
+    <string name="app_logo">Logo de la aplicación</string>
+
+    <string name="menu_status">Estado/Estadísticas</string>
+    <string name="menu_server">Servidor</string>
+    <string name="menu_dns">DNS</string>
+    <string name="menu_certificates">Certificados</string>
+    <string name="menu_other">Otros</string>
+    <string name="menu_general">⚙General</string>
+    <string name="creators_info_text">Aplicación desarrollada con ♥\npor Skilkry y Daniel</string>
+    <string name="menu_status_title">Estado</string>
+    <string name="menu_server_settings_title">Ajustes del Servidor</string>
+    <string name="menu_dns_title">DNS</string>
+    <string name="menu_certificates_title">Certificados</string>
+
     <!-- Mensajes detallados de estados -->
     <string name="detail_doh_dot">Protocolo actual: %1$s</string>
     <string name="detail_pinning_on">Activado</string>
@@ -160,8 +225,7 @@
     <string name="about_developer">Desarrollador</string>
     <string name="about_website">Sitio web</string>
     <string name="about_license">Licencia</string>
-    <string name="vpn_permission_denied">Permiso de VPN denegado</string>
-    <string name="cert_status_warning">Certificado peligroso ⚠️</string>
+
     <string name="save_certificate">Guardar Certificado (Certificate Pinning)</string>
     <string name="certificate_verification">Verificación de Certificados</string>
     <string name="status_not_verified">Estado: No verificado</string>
@@ -172,7 +236,7 @@
     <string name="dns_change_notice">Los cambios se aplicarán al reiniciar la VPN</string>
     <string name="save_button">Guardar</string>
     <string name="github_profile">By Skilkry</string>
-    <string name="cancel_button">Cancelar</string>
+
         <string name="dns_settings">Ajustes de DNS</string>
         <string name="primary_dns_icon">Ícono DNS Primario</string>
         <string name="secondary_dns_icon">Ícono DNS Secundario</string>
@@ -184,4 +248,7 @@
         <string name="dns_info_text">El DNS (Sistema de Nombres de Dominio) traduce los nombres de sitios web en direcciones IP para que tu dispositivo pueda conectarse a ellos. Utilizar un DNS seguro y rápido puede mejorar tu experiencia de navegación y aumentar tu privacidad.</string>
     <string name="verify_certificate">Verificar Certificado</string>
     <string name="configure_server">Configurar Servidor</string>
+    <string name="unexpected_error_title">unexpected_error_title</string>
+
+
 </resources>

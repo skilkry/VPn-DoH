@@ -36,7 +36,7 @@ class SecurityAuditActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Auditoría de Seguridad"
+        supportActionBar?.title = "\nAuditoría de Seguridad"
 
         // Inicializar vistas
         recyclerView = findViewById(R.id.recyclerView)

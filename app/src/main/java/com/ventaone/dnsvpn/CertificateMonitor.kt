@@ -15,6 +15,7 @@ import kotlin.concurrent.thread
 class CertificateMonitor(private val context: Context) {
 
     interface CertificateStatusListener {
+
         fun onCertificateStatus(status: CertificateStatus)
     }
 
