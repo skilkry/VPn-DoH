@@ -41,9 +41,8 @@ Cliente VPN para Android enfocado en la privacidad y seguridad, que asegura toda
 
 Este proyecto fue diseñado y desarrollado en su totalidad por:
 
-* **skilkry** - ([Tu Nombre Completo])
+* **skilkry** - ([Daniel Sardina])
     * [GitHub](https://github.com/skilkry)
-    * [LinkedIn](URL_DE_TU_PERFIL_DE_LINKEDIN) *(Opcional, pero muy recomendable)*
 
 ---
 
