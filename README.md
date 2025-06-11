@@ -5,7 +5,8 @@
 
 Cliente VPN para Android enfocado en la privacidad y seguridad, que asegura todas las consultas DNS del dispositivo a través del protocolo DNS-over-HTTPS (DoH), ofreciendo además funcionalidades de bloqueo de anuncios y malware.
 
-![Captura de pantalla de la app](https://ibb.co/ZpqN2rQr)
+![image](https://github.com/user-attachments/assets/9491322d-8966-408f-a8a2-db4de341bdbb)
+
 
 
 ---
