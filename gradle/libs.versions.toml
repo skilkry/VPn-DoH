@@ -24,6 +24,8 @@ recyclerview = "1.4.0"
 media3CommonKtx = "1.6.1"
 filamentAndroid = "1.17.1"
 carUiLib = "2.6.0"
+lifecycleCommonJvm = "2.9.1"
+volley = "1.2.1"
 
 [libraries]
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -55,6 +57,8 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
 car-ui-lib = { group = "com.android.car.ui", name = "car-ui-lib", version.ref = "carUiLib" }
+androidx-lifecycle-common-jvm = { group = "androidx.lifecycle", name = "lifecycle-common-jvm", version.ref = "lifecycleCommonJvm" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

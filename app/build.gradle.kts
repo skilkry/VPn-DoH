@@ -72,7 +72,8 @@ android {
 }
 
 dependencies {
-    // Core Android
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.12")
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -94,6 +95,8 @@ dependencies {
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.filament.android)
     implementation(libs.car.ui.lib)
+    implementation(libs.androidx.lifecycle.common.jvm)
+    implementation(libs.volley)
     // Jetpack Compose
     val composeVersion = "1.4.0"
     implementation("androidx.compose.ui:ui:$composeVersion")

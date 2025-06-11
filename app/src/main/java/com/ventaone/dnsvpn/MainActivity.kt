@@ -1,4 +1,13 @@
-package com.ventaone.dnsvpn // O tu package name real
+/**
+ * MainActivity - Actividad principal de la aplicación.
+ *
+ * @authors skilkry (Daniel Sardina)  ¢ Daniel Enriquez Cayuelas
+ * @since 2025-04-01
+ * Copyright (c) 2025 skilkry. All rights reserved.
+ * Licenciado bajo la Licencia MIT.
+ */
+
+package com.ventaone.dnsvpn
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -10,19 +19,18 @@ import android.net.VpnService
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu // Necesario para onCreateOptionsMenu
+import android.view.Menu
 import android.view.MenuItem
-import android.view.View // Necesario para DrawerListener
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-// import androidx.appcompat.app.ActionBarDrawerToggle // Ya no se usa para esta configuración
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat // Sigue siendo necesario
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
@@ -31,15 +39,15 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.navigation.NavigationView
 import java.io.File
 
+
 class MainActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener, // Para el Drawer
+    NavigationView.OnNavigationItemSelectedListener,
     CertificateMonitor.CertificateStatusListener,
     PowerButtonManager.VpnStateListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // Tags para Logs
-    private val TAG = "MainActivity" // Tu TAG principal
-    private val DRAWER_TAG = "DrawerDebug" // TAG para el Drawer
+    private val TAG = "MainActivity"
+    private val DRAWER_TAG = "DrawerDebug"
 
     // Vistas principales de tu UI
     private lateinit var powerButtonManager: PowerButtonManager

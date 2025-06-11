@@ -1,8 +1,18 @@
+/**
+ * DnsVpnService - Clase que lleva el flujo de la aplicación.
+ *
+ * @authors skilkry (Daniel Sardina)  ¢ Daniel Enriquez Cayuelas
+ * @since 2025-04-01
+ * Copyright (c) 2025 skilkry. All rights reserved.
+ * Licenciado bajo la Licencia MIT.
+ */
+
 package com.ventaone.dnsvpn
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.VoiceInteractor
 // import android.content.ContentValues.TAG // Ya no se usa TAG aquí, Log usa su propio TAG
 import android.content.Context
 import android.content.Intent
@@ -15,6 +25,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.android.volley.Request
 import com.ventaone.dnsvpn.network.PacketParser
 import com.ventaone.dnsvpn.network.Protocol
 // import com.ventaone.dnsvpn.network.UDPHeader // Asegúrate de que UDPHeader esté importado si PacketParser lo devuelve directamente
@@ -405,7 +416,7 @@ class DnsVpnService : VpnService(), Runnable {
     private fun performDohQuery(domain: String): List<String> {
         val queryData = DNSPacketBuilder.buildDnsQueryForDoH(domain)
         val requestBody = queryData.toRequestBody("application/dns-message".toMediaTypeOrNull())
-        val request = Request.Builder().url(serverUrl).post(requestBody).addHeader("Accept", "application/dns-message").build()
+        val request = VoiceInteractor.Request.Builder().url(serverUrl).post(requestBody).addHeader("Accept", "application/dns-message").build()
         try {
             Log.d(TAG_SERVICE, "[DEBUG] DOH: Enviando petición para '$domain' a $serverUrl")
             val response = client.newCall(request).execute()
