@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# Script para crear todos los archivos necesarios para la instalación de DoT.
-# Ejecútalo una vez para generar todos los demás scripts en el directorio actual.
 #Daniel Enrique Cayuelas as D.E.C whole doc
 # ----------------------------------------------------------------
 # Script:       Setup_DNS_Server.sh
@@ -16,14 +13,8 @@
 
 
 
-echo "⚙️  Creando los scripts de instalación de DNS-over-TLS..."
+echo " Creando los scripts de instalación de DNS-over-TLS..."
 echo "----------------------------------------------------"
-
-# ==============================================================================
-#                                   1. common.sh
-# ==============================================================================
-echo "    -> Creando common.sh..."
-cat <<'EOF' > common.sh
 #!/bin/bash
 # common.sh: Funciones y variables comunes
 
@@ -81,7 +72,7 @@ function restart_service() {
     return 1;
 }
 
-# Mensaje Post-Instalación Paquete
+# Mensaje despúes de instalar un paquete
 function display_package_version_and_prompt() {
     local package_name="$1"; local version_command="$2"; local service_name="$3"
     echo -e "${BLUE}──────────────────────────────────────────────────────────────────────────${NC}"
@@ -125,11 +116,6 @@ function update_packages() {
 # Inicializar archivo de limpieza
 > "/tmp/dot_cleanup_tasks"
 EOF
-
-# ==============================================================================
-#                               2. config.template.sh
-# ==============================================================================
-echo "    -> Creando config.template.sh..."
 cat <<'EOF' > config.template.sh
 #!/bin/bash
 # config.sh: Configuración Global
@@ -163,14 +149,8 @@ CLEANUP_FILE="/tmp/dot_cleanup_tasks"
 # Ensure cleanup file is empty at start
 > "$CLEANUP_FILE"
 EOF
-
-# ==============================================================================
-#                               3. detect_system.sh
-# ==============================================================================
-echo "    -> Creando detect_system.sh..."
 cat <<'EOF' > detect_system.sh
 #!/bin/bash
-# detect_system.sh: Detecta SO, paquetes, firewall, IP.
 source common.sh; source config.sh
 
 print_info "Detectando sistema..."
@@ -198,14 +178,8 @@ sed -i "s/^SERVER_IP=.*/SERVER_IP=\"$SERVER_IP\"/" config.sh
 
 print_success "Detección completada."
 EOF
-
-# ==============================================================================
-#                               4. check_dns.sh
-# ==============================================================================
-echo "    -> Creando check_dns.sh..."
 cat <<'EOF' > check_dns.sh
 #!/bin/bash
-# check_dns.sh: Verifica la propagación DNS.
 source common.sh; source config.sh
 
 print_info "Iniciando comprobación DNS para ${BOLD}$DOMAIN${NC}."
@@ -234,14 +208,8 @@ if [ "$USE_IPV6" == "yes" ]; then
 fi
 print_success "Verificación DNS completada."
 EOF
-
-# ==============================================================================
-#                               5. setup_nginx.sh
-# ==============================================================================
-echo "    -> Creando setup_nginx.sh..."
 cat <<'EOF' > setup_nginx.sh
 #!/bin/bash
-# setup_nginx.sh: Instala Nginx.
 source common.sh; source config.sh
 
 print_info "Instalando Nginx."
@@ -261,14 +229,8 @@ install_package "nginx"
 print_success "Nginx instalado."
 display_package_version_and_prompt "Nginx" "nginx -v" "nginx"
 EOF
-
-# ==============================================================================
-#                               6. setup_certbot.sh
-# ==============================================================================
-echo "    -> Creando setup_certbot.sh..."
 cat <<'EOF' > setup_certbot.sh
 #!/bin/bash
-# setup_certbot.sh: Instala Certbot y obtiene certificado.
 source common.sh; source config.sh
 
 function install_certbot() {
@@ -319,14 +281,8 @@ install_certbot
 configure_nginx_http_for_certbot
 get_cert
 EOF
-
-# ==============================================================================
-#                               7. setup_stubby.sh
-# ==============================================================================
-echo "    -> Creando setup_stubby.sh..."
 cat <<'EOF' > setup_stubby.sh
 #!/bin/bash
-# setup_stubby.sh: Instala y configura Stubby.
 source common.sh; source config.sh
 
 function install_stubby() {
@@ -389,14 +345,8 @@ E_O_F
 install_stubby
 configure_stubby
 EOF
-
-# ==============================================================================
-#                               8. setup_nginx_dot.sh
-# ==============================================================================
-echo "    -> Creando setup_nginx_dot.sh..."
 cat <<'EOF' > setup_nginx_dot.sh
 #!/bin/bash
-# setup_nginx_dot.sh: Configura Nginx para DoT (Stream Proxy).
 source common.sh; source config.sh
 
 print_info "Configurando Nginx para DoT."
@@ -480,15 +430,8 @@ register_cleanup_task "rm -f $FINAL_CONF $FINAL_LINK"
 run_with_spinner "Probando config final Nginx" "nginx -t" || print_error_and_exit "Config Nginx final errónea."
 restart_service "nginx"
 print_success "Nginx configurado como proxy DoT."
-
-
-# ==============================================================================
-#                               9. setup_firewall.sh
-# ==============================================================================
-echo "    -> Creando setup_firewall.sh..."
 cat <<'EOF' > setup_firewall.sh
 #!/bin/bash
-# setup_firewall.sh: Configura el firewall.
 source common.sh; source config.sh
 
 print_info "Configurando firewall ($FIREWALL_MANAGER)."
@@ -509,14 +452,8 @@ case "$FIREWALL_MANAGER" in
 esac
 print_success "Firewall configurado."
 EOF
-
-# ==============================================================================
-#                               10. setup_extras.sh
-# ==============================================================================
-echo "    -> Creando setup_extras.sh..."
 cat <<'EOF' > setup_extras.sh
 #!/bin/bash
-# setup_extras.sh: Instala SNMP y Fail2ban.
 source common.sh; source config.sh
 
 function install_snmp() {
@@ -563,14 +500,7 @@ install_snmp
 install_fail2ban
 print_success "Extras instalados."
 EOF
-
-# ==============================================================================
-#                               11. main.sh
-# ==============================================================================
 #!/bin/bash
-# main.sh: Orquestador Principal de Instalación DoT
-
-# Verificar y preparar entorno
 [ ! -f "common.sh" ] && echo "ERROR: common.sh no encontrado." && exit 1
 [ ! -f "config.template.sh" ] && echo "ERROR: config.template.sh no encontrado." && exit 1
 cp config.template.sh config.sh || { echo "ERROR: No se pudo copiar config.sh."; exit 1; }
@@ -651,7 +581,6 @@ function print_final_message() {
     echo -e "${BLUE}──────────────────────────────────────────────────────────────────────────${NC}"
 }
 
-# ==================== EJECUCIÓN PRINCIPAL ====================
 print_welcome_message
 get_user_input
 source common.sh
@@ -686,16 +615,12 @@ INSTALL_COMPLETE=true
 print_final_message
 EOF
 
-
-# ==============================================================================
-#                                   FIN
-# ==============================================================================
 echo "----------------------------------------------------"
-echo "✅  ¡Listo! Todos los scripts han sido creados."
+echo "  ¡Listo! Todos los scripts han sido creados."
 echo "    Aplicando permisos de ejecución..."
 chmod +x *.sh
 echo "    Permisos aplicados."
 echo ""
-echo "👉  Ahora puedes ejecutar el script principal con:"
+echo "  Ahora puedes ejecutar el script principal con:"
 echo "    sudo ./main.sh"
 echo ""
