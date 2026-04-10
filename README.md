@@ -43,7 +43,7 @@ Este proyecto fue desarrollado en su totalidad por:
 **Skilkry (Daniel Sardina)**  
 🔗 [github.com/skilkry](https://github.com/skilkry)
 
-> ⚠️ **Importante:** Este trabajo fue realizado durante mis prácticas profesionales en el entorno de [nombre de la empresa si quieres mencionarla], bajo supervisión técnica. El código aquí presentado corresponde a mi versión original, publicada con fines formativos y bajo licencia abierta.
+> ⚠️ **Importante:** Este trabajo fue realizado durante mis prácticas profesionales en el entorno de [VentaOne], bajo supervisión técnica. El código aquí presentado corresponde a mi versión original, publicada con fines formativos y bajo licencia abierta.
 
 ---
 
